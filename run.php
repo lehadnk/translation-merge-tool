@@ -9,5 +9,5 @@
 require __DIR__.'/vendor/autoload.php';
 
 $workingDir = getcwd();
-$app = new \TranslationMergeTool\App();
-$app->run($workingDir);
+$app = new \TranslationMergeTool\App($workingDir);
+$app->run();

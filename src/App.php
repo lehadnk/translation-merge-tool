@@ -11,8 +11,10 @@ namespace TranslationMergeTool;
 
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
+use TranslationMergeTool\CodeParser\Parser;
 use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
+use TranslationMergeTool\DTO\TranslationFile;
 
 class App extends CLI
 {
@@ -36,10 +38,6 @@ class App extends CLI
      */
     private $weblateAPI;
 
-    public function __create(string $workingDir, Config $config) {
-        $this->workingDir = $workingDir;
-    }
-
     protected function setup(Options $options)
     {
         $options->setHelp('A tool for merging translation files for giftd projects');
@@ -57,20 +55,63 @@ class App extends CLI
 
         $this->bitbucketAPI = new BitbucketAPI($this->config);
         $this->weblateAPI = new WeblateAPI($this->config);
+        $this->workingDir = getcwd();
 
         $this->updateTranslations();
     }
 
     private function updateTranslations()
     {
-        $this->info("Updating translation files...");
+        $this->info("Parsing code base...");
+
+        /**
+         * @var $affectedTranslationFiles TranslationFile[]
+         */
+        $affectedTranslationFiles = [];
+
+        $parser = new Parser($this->config);
+        foreach ($this->config->components as $component) {
+            $this->info("Parsing component {$component->name}...");
+
+            $strings = [];
+            foreach ($component->includeDirectories as $directory) {
+                $strings = array_merge($strings, $parser->getStrings($this->workingDir.'/'.$directory));
+            }
+
+            $strings = array_unique($strings);
+            $this->info(count($strings)." unique strings found!");
+
+            $this->info("Parsing translation files...");
+            foreach($this->config->locales as $locale) {
+                $this->info("Parsing locale - {$locale->localeName}...");
+
+                $translationFile = new TranslationFile();
+                $translationFile->relativePath = $component->getTranslationFileName($locale->localeName);
+                $translationFile->absolutePath = $this->workingDir.'/'.$translationFile->relativePath;
+                $translationFile->weblateCode = $locale->weblateCode;
+                $affectedTranslationFiles[] = $translationFile;
+
+                $reader = new GettextReader($translationFile->absolutePath);
+                $count = $reader->addNewTranslations($strings);
+                $this->info("Added {$count} new strings...");
+            }
+        }
+
         $this->info("Pushing updated files to bitbucket...");
-        $this->bitbucketAPI->pushFile('1', '2', '3');
+        foreach ($affectedTranslationFiles as $translationFile) {
+            $this->bitbucketAPI->pushFile($translationFile->relativePath, $translationFile->absolutePath, $this->config->translationBranchName);
+        }
 
         $this->info("Pulling the weblate components...");
         $this->weblateAPI->pullComponent();
 
-        $this->info("Downloading new translation files...");
-        $this->weblateAPI->downloadTranslation('tr');
+        $this->info("Downloading new translation files from weblate...");
+        foreach ($affectedTranslationFiles as $translationFile) {
+            $fileContents = $this->weblateAPI->downloadTranslation($translationFile->weblateCode);
+            /**
+             * @todo Здесь проверить что пришло с сервера перед записью!
+             */
+            file_put_contents($translationFile->absolutePath, $fileContents);
+        }
     }
 }

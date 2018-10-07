@@ -27,7 +27,12 @@ class Component
     public $excludeDirectories;
 
     /**
-     * @MarshallProperty(name="path", type="string")
+     * @MarshallProperty(name="translationFileName", type="string")
      */
-    public $path;
+    public $translationFileName;
+
+    public function getTranslationFileName(string $languageCode): string
+    {
+        return str_replace('{localeName}', $languageCode, $this->translationFileName);
+    }
 }

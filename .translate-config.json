@@ -17,9 +17,12 @@
   "components": [
     {
       "name": "default",
-      "includeDirectories": [],
+      "includeDirectories": [
+        "app/",
+        "resources/"
+      ],
       "excludeDirectories": [],
-      "path": "common/i18n"
+      "translationFileName": "resources/lang/i18n/{localeName}/LC_MESSAGES/default.po"
     }
   ],
 
