@@ -57,7 +57,7 @@ class App extends CLI
         $this->config = ConfigFactory::read($configFileName);
 
         $this->bitbucketAPI = new BitbucketAPI($this->config);
-        $this->weblateAPI = new WeblateAPI();
+        $this->weblateAPI = new WeblateAPI($this->config);
 
         $this->updateTranslations();
     }
