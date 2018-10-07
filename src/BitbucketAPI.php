@@ -28,8 +28,9 @@ class BitbucketAPI
     }
 
     /**
-     * @param string $remoteName
+     * @param string $remoteFileName
      * @param string $fileName
+     * @param string $branchName
      *
      * Request example:
      * curl -u lehadnk@gmail.com:7e4y2ad2 \

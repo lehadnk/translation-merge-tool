@@ -72,6 +72,6 @@ class App extends CLI
         $this->weblateAPI->pullComponent();
 
         $this->info("Downloading new translation files...");
-        $this->weblateAPI->downloadTranslation();
+        $this->weblateAPI->downloadTranslation('tr');
     }
 }
