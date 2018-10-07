@@ -10,7 +10,6 @@ namespace TranslationMergeTool;
 
 
 use splitbrain\phpcli\CLI;
-use splitbrain\phpcli\Exception;
 use splitbrain\phpcli\Options;
 use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
