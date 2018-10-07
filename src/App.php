@@ -108,6 +108,7 @@ class App extends CLI
         $this->info("Downloading new translation files from weblate...");
         foreach ($affectedTranslationFiles as $translationFile) {
             $fileContents = $this->weblateAPI->downloadTranslation($translationFile->weblateCode);
+            
             /**
              * @todo Здесь проверить что пришло с сервера перед записью!
              */
