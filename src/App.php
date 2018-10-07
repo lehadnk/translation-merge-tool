@@ -92,7 +92,7 @@ class App extends CLI
                 $affectedTranslationFiles[] = $translationFile;
 
                 $reader = new GettextReader($translationFile->absolutePath);
-                $count = $reader->addNewTranslations($strings);
+                $count = $reader->addNewTranslations($strings, $translationFile->absolutePath);
                 $this->info("Added {$count} new strings...");
             }
         }
@@ -108,7 +108,7 @@ class App extends CLI
         $this->info("Downloading new translation files from weblate...");
         foreach ($affectedTranslationFiles as $translationFile) {
             $fileContents = $this->weblateAPI->downloadTranslation($translationFile->weblateCode);
-            
+
             /**
              * @todo Здесь проверить что пришло с сервера перед записью!
              */

@@ -29,14 +29,19 @@ class WeblateAPI
      */
     private $httpClient;
 
+    /**
+     * @var string
+     */
+    private $token;
+
     public function __construct(Config $config)
     {
         $this->authToken = $config->weblateAuthToken;
         $this->projectSlug = $config->weblateProjectSlug;
+        $this->token = $config->weblateAuthToken;
 
         $this->httpClient = new Client([
             'base_uri' => $config->weblateServiceUrl.'/api/',
-            'auth' => ['Token '.$config->weblateAuthToken],
         ]);
     }
 
@@ -49,7 +54,7 @@ class WeblateAPI
      * http://159.65.200.211/api/components/crm/translate/repository/
      */
     public function pullComponent() {
-        $this->httpClient->get(
+        $this->httpClient->post(
             "components/{$this->projectSlug}/translate/repository",
             [
                 'multipart' => [
@@ -57,6 +62,9 @@ class WeblateAPI
                         'name' => 'operation',
                         'contents' => 'pull',
                     ]
+                ],
+                'headers' => [
+                    'Authorization' => 'Token '.$this->token,
                 ]
             ]
         );
@@ -73,9 +81,14 @@ class WeblateAPI
     public function downloadTranslation(string $localeName)
     {
         $result = $this->httpClient->get(
-            "components/{$this->projectSlug}/translate/$localeName/file"
+            "translations/{$this->projectSlug}/translate/$localeName/file",
+            [
+                'headers' => [
+                    'Authorization' => 'Token '.$this->token,
+                ]
+            ]
         );
 
-        return $result->getBody();
+        return $result->getBody()->getContents();
     }
 }

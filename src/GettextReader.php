@@ -20,7 +20,7 @@ class GettextReader
         $this->translations = Translations::fromPoFile($fileName);
     }
 
-    public function addNewTranslations(array $strings)
+    public function addNewTranslations(array $strings, string $fileName)
     {
         $originalCount = $this->translations->count();
 
@@ -29,6 +29,7 @@ class GettextReader
                 $this->translations->insert('', $string);
             }
         }
+        $this->translations->toPoFile($fileName);
 
         return $this->translations->count() - $originalCount;
     }
