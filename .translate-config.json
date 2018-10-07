@@ -1,0 +1,35 @@
+{
+  "locales": [
+    {
+      "weblateCode": "ru",
+      "localeName": "ru_RU"
+    },
+    {
+      "weblateCode": "tr",
+      "localeName": "tr_TR"
+    },
+    {
+      "weblateCode": "zh",
+      "localeName": "zh_CN"
+    }
+  ],
+
+  "components": [
+    {
+      "name": "default",
+      "includeDirectories": [],
+      "excludeDirectories": [],
+      "path": "common/i18n"
+    }
+  ],
+
+  "bitbucketUsername": "lehadnk@gmail.com",
+  "bitbucketPassword": "7e4y2ad2",
+  "bitbucketRepository": "nevidimov/giftd-crm",
+
+  "translationBranchName": "translation-test",
+
+  "weblateServiceUrl": "http://159.65.200.211",
+  "weblateProjectSlug": "crm",
+  "weblateAuthToken": "g8XOJcY5Z7UkNbLYOjCl77DpPEXa9yEJ5j4orv7I"
+}

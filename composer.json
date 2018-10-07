@@ -1,0 +1,17 @@
+{
+    "name": "giftd/translation-merge-tool",
+    "description": "The tool for generation and merge of translation files.",
+    "authors": [
+        {
+            "name": "Alexey Zauzin",
+            "email": "lehadnk@gmail.com"
+        }
+    ],
+    "require": {
+        "gettext/gettext": "^4.6",
+        "anujrnair/php-json-marshaller": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {"TranslationMergeTool\\": "src/"}
+    }
+}
