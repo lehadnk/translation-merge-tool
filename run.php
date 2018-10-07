@@ -8,4 +8,6 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-$config = \TranslationMergeTool\Config\ConfigFactory::read(__DIR__.'/.translate-config.json');
+$workingDir = getcwd();
+$app = new \TranslationMergeTool\App();
+$app->run($workingDir);

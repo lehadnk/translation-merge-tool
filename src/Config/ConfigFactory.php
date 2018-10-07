@@ -19,7 +19,6 @@ class ConfigFactory
 
         $marshaller = new JsonMarshaller(new ClassDecoder(new DoctrineAnnotationReader()));
         $config = $marshaller->unmarshall($contents, Config::class);
-        var_dump($config);
 
         return $config;
     }
