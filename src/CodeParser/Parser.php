@@ -69,7 +69,8 @@ class Parser
         foreach ($fileList as $fileInfo) {
             $excluded = false;
             foreach ($excludeDirectories as $excludeDirectory) {
-                if (substr($fileInfo[0], 0, strlen($excludeDirectory) + strlen($workingDir) + 1) === $workingDir.'/'.$excludeDirectory) $excluded = true;
+                $searchSubstr = $workingDir . '/' . $excludeDirectory;
+                if (substr($fileInfo[0], 0, strlen($searchSubstr)) === $searchSubstr) $excluded = true;
             }
             if (!$excluded) {
                 $filteredList[] = $fileInfo[0];
