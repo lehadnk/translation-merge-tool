@@ -50,7 +50,7 @@ class WeblateAPI
      *
      * curl \
      * -d operation=pull \
-     * -H "Authorization: Token g8XOJcY5Z7UkNbLYOjCl77DpPEXa9yEJ5j4orv7I" \
+     * -H "Authorization: Token token" \
      * http://159.65.200.211/api/components/crm/translate/repository/
      */
     public function pullComponent() {
@@ -74,7 +74,7 @@ class WeblateAPI
      *
      *
      * curl -X GET \
-     * -H "Authorization: Token g8XOJcY5Z7UkNbLYOjCl77DpPEXa9yEJ5j4orv7I" \
+     * -H "Authorization: Token token" \
      * -o download.po \
      * http://159.65.200.211/api/translations/crm/translate/tr/file/
      */

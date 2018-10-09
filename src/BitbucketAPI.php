@@ -33,7 +33,7 @@ class BitbucketAPI
      * @param string $branchName
      *
      * Request example:
-     * curl -u lehadnk@gmail.com:7e4y2ad2 \
+     * curl -u lehadnk@gmail.com:password \
      * -X POST https://api.bitbucket.org/2.0/repositories/nevidimov/giftd-crm/src \
      * -F resources/lang/i18n/tr_TR/LC_MESSAGES/default.po=@resources/lang/i18n/tr_TR/LC_MESSAGES/default.po \
      * -F branch=translation-test \
