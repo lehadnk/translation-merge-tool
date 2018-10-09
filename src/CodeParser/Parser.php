@@ -13,8 +13,6 @@ use TranslationMergeTool\Config\Config;
 
 class Parser
 {
-    const EXTENSIONS = ['php', 'vue', 'js'];
-
     const REGEXPS = [
         '"' => '/_?_(?:link)?\(\s*"(([^"\\\\]*(\\\\.[^"\\\\]*)*))"\s*(,|\))/m',
         "'" => '/_?_(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
@@ -30,21 +28,23 @@ class Parser
 
     }
 
+    private function getFileList(string $path): \RegexIterator
+    {
+        $directory = new \RecursiveDirectoryIterator($path);
+        $iterator = new \RecursiveIteratorIterator($directory);
+        $fileList = new \RegexIterator($iterator, '/^.+\.(?:php|js|vue)$/i', \RegexIterator::GET_MATCH);
+
+        return $fileList;
+    }
+
     public function getStrings(string $path): array
     {
-        $iterator = new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $strings = [];
-        foreach($iterator->getChildren() as $child) {
-            /**
-             * @var $child \SplFileInfo
-             * @todo Убрать когда станет понятно почему не обходит все файлы
-             */
-//            var_dump($child->getFileInfo()->getPathname());
+        $fileList = $this->getFileList($path);
 
-            if (in_array($child->getExtension(), self::EXTENSIONS)) {
-                $path = $child->getFileInfo()->getPathname();
-                $strings = array_merge($strings, $this->parseFile($path));
-            }
+        $strings = [];
+        foreach($fileList as $fileInfo) {
+            $path = $fileInfo[0];
+            $strings = array_merge($strings, $this->parseFile($path));
         }
 
         return $strings;
