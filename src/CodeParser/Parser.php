@@ -37,14 +37,14 @@ class Parser
         return $fileList;
     }
 
-    public function getStrings(string $path): array
+    public function getStrings(string $path, array $excludeDirectories, string $workingDir): array
     {
         $fileList = $this->getFileList($path);
+        $filteredList = $this->filterFileList($fileList, $excludeDirectories, $workingDir);
 
         $strings = [];
-        foreach($fileList as $fileInfo) {
-            $path = $fileInfo[0];
-            $strings = array_merge($strings, $this->parseFile($path));
+        foreach($filteredList as $fileInfo) {
+            $strings = array_merge($strings, $this->parseFile($fileInfo));
         }
 
         return $strings;
@@ -61,5 +61,21 @@ class Parser
         }
 
         return $result;
+    }
+
+    private function filterFileList(\RegexIterator $fileList, array $excludeDirectories, string $workingDir)
+    {
+        $filteredList = [];
+        foreach ($fileList as $fileInfo) {
+            $excluded = false;
+            foreach ($excludeDirectories as $excludeDirectory) {
+                if (substr($fileInfo[0], 0, strlen($excludeDirectory) + strlen($workingDir) + 1) === $workingDir.'/'.$excludeDirectory) $excluded = true;
+            }
+            if (!$excluded) {
+                $filteredList[] = $fileInfo[0];
+            }
+        }
+
+        return $filteredList;
     }
 }

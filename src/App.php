@@ -75,7 +75,14 @@ class App extends CLI
 
             $strings = [];
             foreach ($component->includeDirectories as $directory) {
-                $strings = array_merge($strings, $parser->getStrings($this->workingDir.'/'.$directory));
+                $strings = array_merge(
+                    $strings,
+                    $parser->getStrings(
+                        $this->workingDir.'/'.$directory,
+                        $component->excludeDirectories,
+                        $this->workingDir
+                    )
+                );
             }
 
             $strings = array_unique($strings);
@@ -96,7 +103,7 @@ class App extends CLI
                 $this->info("Added {$count} new strings...");
             }
         }
-
+die();
         $this->info("Pushing updated files to bitbucket...");
         foreach ($affectedTranslationFiles as $translationFile) {
             $this->bitbucketAPI->pushFile($translationFile->relativePath, $translationFile->absolutePath, $this->config->translationBranchName);
