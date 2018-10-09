@@ -9,7 +9,9 @@
 namespace TranslationMergeTool;
 
 
+use Gettext\Translation;
 use Gettext\Translations;
+use TranslationMergeTool\DTO\TranslationString;
 
 class GettextReader
 {
@@ -20,15 +22,25 @@ class GettextReader
         $this->translations = Translations::fromPoFile($fileName);
     }
 
-    public function addNewTranslations(array $strings, string $fileName)
+    /**
+     * @param TranslationString[] $translationStrings
+     * @param string $fileName
+     * @return int
+     */
+    public function addNewTranslations(array $translationStrings, string $fileName)
     {
         $originalCount = $this->translations->count();
-
-        foreach ($strings as $string) {
-            if (!$this->translations->find($string)) {
-                $this->translations->insert('', $string);
+        foreach ($translationStrings as $translationString) {
+            if (!$this->translations->offsetGet(Translation::generateId('', $translationString->originalString))) {
+                $translation = new Translation('', $translationString->originalString);
+                $translation->addComment('Branch: '.$translationString->branchName);
+                foreach ($translationString->fileReferences as $reference) {
+                    $translation->addReference($reference);
+                }
+                $this->translations->offsetSet(null, $translation);
             }
         }
+
         $this->translations->toPoFile($fileName);
 
         return $this->translations->count() - $originalCount;

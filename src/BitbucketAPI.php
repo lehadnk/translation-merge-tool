@@ -46,11 +46,11 @@ class BitbucketAPI
                 'multipart' => [
                     [
                         'name' => 'branch',
-                        'contents' => 'translation-test',
+                        'contents' => $branchName,
                     ],
                     [
-                        'name' => 'resources/lang/i18n/tr_TR/LC_MESSAGES/default.po',
-                        'contents' => file_get_contents('/Users/lehadnk/work/giftd/crm/resources/lang/i18n/tr_TR/LC_MESSAGES/default.po'),
+                        'name' => $remoteFileName,
+                        'contents' => file_get_contents($fileName),
                     ]
                 ],
             ]

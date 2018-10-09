@@ -25,6 +25,11 @@ class WeblateAPI
     private $projectSlug;
 
     /**
+     * @var string
+     */
+    private $componentSlug;
+
+    /**
      * @var Client
      */
     private $httpClient;
@@ -39,6 +44,7 @@ class WeblateAPI
         $this->authToken = $config->weblateAuthToken;
         $this->projectSlug = $config->weblateProjectSlug;
         $this->token = $config->weblateAuthToken;
+        $this->componentSlug = $config->weblateComponentSlug;
 
         $this->httpClient = new Client([
             'base_uri' => $config->weblateServiceUrl.'/api/',
@@ -55,7 +61,7 @@ class WeblateAPI
      */
     public function pullComponent() {
         $this->httpClient->post(
-            "components/{$this->projectSlug}/translate/repository",
+            "components/{$this->projectSlug}/{$this->componentSlug}/repository/",
             [
                 'multipart' => [
                     [
@@ -81,7 +87,7 @@ class WeblateAPI
     public function downloadTranslation(string $localeName)
     {
         $result = $this->httpClient->get(
-            "translations/{$this->projectSlug}/translate/$localeName/file",
+            "translations/{$this->projectSlug}/{$this->componentSlug}/$localeName/file",
             [
                 'headers' => [
                     'Authorization' => 'Token '.$this->token,

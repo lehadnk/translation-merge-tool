@@ -34,5 +34,6 @@
 
   "weblateServiceUrl": "http://159.65.200.211",
   "weblateProjectSlug": "crm",
+  "weblateComponentSlug": "main",
   "weblateAuthToken": "token"
 }

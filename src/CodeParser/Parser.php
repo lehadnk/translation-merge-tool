@@ -9,7 +9,9 @@
 namespace TranslationMergeTool\CodeParser;
 
 
+use TranslationMergeTool\Config\Component;
 use TranslationMergeTool\Config\Config;
+use TranslationMergeTool\DTO\TranslationString;
 
 class Parser
 {
@@ -18,62 +20,109 @@ class Parser
         "'" => '/_?_(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
     ];
 
+
     /**
-     * @var Config
+     * @var Component
      */
-    private $config;
+    private $component;
 
-    public function __construct(Config $config)
+    /**
+     * @var string
+     */
+    private $workingDir;
+
+    /**
+     * @var string
+     */
+    private $branchName;
+
+    /**
+     * @var TranslationString[]
+     */
+    private $translationStrings = [];
+
+    public function __construct(Component $component, string $workingDir, string $branchName)
     {
-
+        $this->component = $component;
+        $this->workingDir = $workingDir;
+        $this->branchName = $branchName;
     }
 
-    private function getFileList(string $path): \RegexIterator
+    private function getFileList(string $path): array
     {
         $directory = new \RecursiveDirectoryIterator($path);
         $iterator = new \RecursiveIteratorIterator($directory);
         $fileList = new \RegexIterator($iterator, '/^.+\.(?:php|js|vue)$/i', \RegexIterator::GET_MATCH);
 
-        return $fileList;
-    }
-
-    public function getStrings(string $path, array $excludeDirectories, string $workingDir): array
-    {
-        $fileList = $this->getFileList($path);
-        $filteredList = $this->filterFileList($fileList, $excludeDirectories, $workingDir);
-
-        $strings = [];
-        foreach($filteredList as $fileInfo) {
-            $strings = array_merge($strings, $this->parseFile($fileInfo));
+        $list = [];
+        foreach ($fileList as $file) {
+            $list[] = $file[0];
         }
 
-        return $strings;
+        return $list;
+    }
+
+    public function getStrings(): array
+    {
+        $this->translationStrings = [];
+        foreach($this->component->includeDirectories as $directory) {
+            $path = $this->workingDir.'/'.$directory;
+            $fileList = $this->getFileList($path);
+            if ($this->component->excludeDirectories) {
+                $fileList = $this->filterFileList($fileList, $this->component->excludeDirectories, $this->workingDir);
+            }
+
+            foreach($fileList as $fileInfo) {
+                $this->parseFile($fileInfo);
+            }
+        }
+
+        return $this->translationStrings;
+    }
+
+    private function hasCyryllicCharacters($string)
+    {
+        return preg_match('/[А-Яа-яЁё]/u', $string);
     }
 
     public function parseFile(string $path)
     {
         $content = file_get_contents($path);
 
-        $result = [];
+        $strings = [];
         foreach(self::REGEXPS as $regexp) {
             preg_match_all($regexp, $content, $regexpResult);
-            $result = array_merge($result, array_unique($regexpResult[1]));
+            $strings = array_unique(array_merge($strings, $regexpResult[1]));
+        }
+
+        $result = [];
+        foreach ($strings as $string) {
+            if ($this->hasCyryllicCharacters($string)) continue;
+
+            $relativePath = substr($path, strlen($this->workingDir) + 1);
+            if (array_key_exists($string, $this->translationStrings)) {
+                $this->translationStrings[$string]->fileReferences[] = $relativePath;
+            } else {
+                $this->translationStrings[$string] = new TranslationString($string, [$relativePath], $this->branchName);
+            }
         }
 
         return $result;
     }
 
-    private function filterFileList(\RegexIterator $fileList, array $excludeDirectories, string $workingDir)
+    private function filterFileList(array $fileList, array $excludeDirectories, string $workingDir)
     {
         $filteredList = [];
-        foreach ($fileList as $fileInfo) {
+        foreach ($fileList as $path) {
             $excluded = false;
+
             foreach ($excludeDirectories as $excludeDirectory) {
                 $searchSubstr = $workingDir . '/' . $excludeDirectory;
-                if (substr($fileInfo[0], 0, strlen($searchSubstr)) === $searchSubstr) $excluded = true;
+                if (substr($path, 0, strlen($searchSubstr)) === $searchSubstr) $excluded = true;
             }
+
             if (!$excluded) {
-                $filteredList[] = $fileInfo[0];
+                $filteredList[] = $path;
             }
         }
 

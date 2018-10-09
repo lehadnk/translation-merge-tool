@@ -69,23 +69,13 @@ class App extends CLI
          */
         $affectedTranslationFiles = [];
 
-        $parser = new Parser($this->config);
+        //$parser = new Parser($this->config);
         foreach ($this->config->components as $component) {
             $this->info("Parsing component {$component->name}...");
 
-            $strings = [];
-            foreach ($component->includeDirectories as $directory) {
-                $strings = array_merge(
-                    $strings,
-                    $parser->getStrings(
-                        $this->workingDir.'/'.$directory,
-                        $component->excludeDirectories,
-                        $this->workingDir
-                    )
-                );
-            }
+            $parser = new Parser($component, $this->workingDir, 'test');
+            $strings = $parser->getStrings();
 
-            $strings = array_unique($strings);
             $this->info(count($strings)." unique strings found!");
 
             $this->info("Parsing translation files...");
@@ -103,7 +93,7 @@ class App extends CLI
                 $this->info("Added {$count} new strings...");
             }
         }
-die();
+
         $this->info("Pushing updated files to bitbucket...");
         foreach ($affectedTranslationFiles as $translationFile) {
             $this->bitbucketAPI->pushFile($translationFile->relativePath, $translationFile->absolutePath, $this->config->translationBranchName);

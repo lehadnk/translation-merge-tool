@@ -43,6 +43,11 @@ class Config
     public $weblateProjectSlug;
 
     /**
+     * @MarshallProperty(name="weblateComponentSlug", type="string")
+     */
+    public $weblateComponentSlug;
+
+    /**
      * @MarshallProperty(name="weblateAuthToken", type="string")
      */
     public $weblateAuthToken;
