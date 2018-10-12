@@ -17,7 +17,7 @@
         "psr-4": {"TranslationMergeTool\\": "src/"}
     },
     "bin": [
-        "bin/i18nmrg"
+        "bin/i18n_mrg"
     ],
     "version": "1.0.3"
 }
