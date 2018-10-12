@@ -17,6 +17,6 @@
         "psr-4": {"TranslationMergeTool\\": "src/"}
     },
     "bin": [
-        "i18nmrg"
+        "bin/i18nmrg"
     ]
 }
