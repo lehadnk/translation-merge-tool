@@ -12,6 +12,7 @@ namespace TranslationMergeTool;
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
 use TranslationMergeTool\CodeParser\Parser;
+use TranslationMergeTool\ComposerJson\ComposerJsonFactory;
 use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
 use TranslationMergeTool\DTO\TranslationFile;
@@ -46,6 +47,11 @@ class App extends CLI
 
     protected function main(Options $options)
     {
+        if ($this->options->getOpt('version')) {
+            $this->info($this->getVersion());
+            exit(0);
+        }
+
         $configFileName = $this->workingDir.'.translate-config.json';
         if (!file_exists($configFileName)) {
             $this->critical("Can't find translation config at ".$configFileName."! The application will terminate");
@@ -111,5 +117,11 @@ class App extends CLI
              */
             file_put_contents($translationFile->absolutePath, $fileContents);
         }
+    }
+
+    private function getVersion()
+    {
+        $composerJson = ComposerJsonFactory::read();
+        return $composerJson->version;
     }
 }

@@ -8,8 +8,12 @@
 
 namespace TranslationMergeTool\ComposerJson;
 
+use PhpJsonMarshaller\Annotations\MarshallProperty;
 
 class ComposerJson
 {
-
+    /**
+     * @MarshallProperty(name="version", type="string")
+     */
+    public $version;
 }
