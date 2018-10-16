@@ -25,11 +25,11 @@ class GettextReader
     /**
      * @param TranslationString[] $translationStrings
      * @param string $fileName
-     * @return int
+     * @return string[] Added strings
      */
     public function addNewTranslations(array $translationStrings, string $fileName)
     {
-        $originalCount = $this->translations->count();
+        $addedStrings = [];
         foreach ($translationStrings as $translationString) {
             if (!$this->translations->offsetGet(Translation::generateId('', $translationString->originalString))) {
                 $translation = new Translation('', $translationString->originalString);
@@ -38,11 +38,13 @@ class GettextReader
                     $translation->addReference($reference);
                 }
                 $this->translations->offsetSet(null, $translation);
+
+                $addedStrings[] = $translationString->originalString;
             }
         }
 
         $this->translations->toPoFile($fileName);
 
-        return $this->translations->count() - $originalCount;
+        return $addedStrings;
     }
 }

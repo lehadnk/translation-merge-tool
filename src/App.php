@@ -9,6 +9,9 @@
 namespace TranslationMergeTool;
 
 
+use Gettext\Translation;
+use Gettext\Translations;
+
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
 use TranslationMergeTool\CodeParser\Parser;
@@ -69,11 +72,13 @@ class App extends CLI
          */
         $affectedTranslationFiles = [];
 
+        $currentBranchName = trim(`git rev-parse --abbrev-ref HEAD`);
+
         //$parser = new Parser($this->config);
         foreach ($this->config->components as $component) {
             $this->info("Parsing component {$component->name}...");
 
-            $parser = new Parser($component, $this->workingDir, 'test');
+            $parser = new Parser($component, $this->workingDir, $currentBranchName);
             $strings = $parser->getStrings();
 
             $this->info(count($strings)." unique strings found!");
@@ -89,8 +94,11 @@ class App extends CLI
                 $affectedTranslationFiles[] = $translationFile;
 
                 $reader = new GettextReader($translationFile->absolutePath);
-                $count = $reader->addNewTranslations($strings, $translationFile->absolutePath);
-                $this->info("Added {$count} new strings...");
+                $addedStrings = $reader->addNewTranslations($strings, $translationFile->absolutePath);
+
+                $addedStringsCount = count($addedStrings);
+                $addedStringsStr = implode("\n\t", $addedStrings);
+                $this->info("Added $addedStringsCount new strings: \n $addedStringsStr\n\n");
             }
         }
 
@@ -102,14 +110,83 @@ class App extends CLI
         $this->info("Pulling the weblate components...");
         $this->weblateAPI->pullComponent();
 
+
+        $totalUpdated = 0;
+        $total = count($affectedTranslationFiles);
         $this->info("Downloading new translation files from weblate...");
         foreach ($affectedTranslationFiles as $translationFile) {
+            $oldFileHash = md5(file_get_contents($translationFile->absolutePath));
+
             $fileContents = $this->weblateAPI->downloadTranslation($translationFile->weblateCode);
+
+            $newFileHash = md5($fileContents);
+
+            if ($oldFileHash == $newFileHash) {
+                $this->info("No changes for {$translationFile->absolutePath}...");
+            } else {
+                $this->info("Updating {$translationFile->absolutePath}...");
+                $totalUpdated++;
+            }
+
+
+            $fileContents = $this->postProcessPoFile($fileContents);
 
             /**
              * @todo Здесь проверить что пришло с сервера перед записью!
              */
             file_put_contents($translationFile->absolutePath, $fileContents);
+
+            $moPath = $translationFile->getAbsolutePathToMo();
+
+            exec("msgfmt -o $moPath {$translationFile->absolutePath}");
         }
+
+        $this->info("Total updated tranlsation files: $totalUpdated / $total");
     }
+
+    private function postProcessPoFile($poFileContents)
+    {
+        $translations = Translations::fromPoString($poFileContents);
+
+        $translations = $this->removeMalformedDisabledTranslactions($translations);
+
+        return $translations->toPoString();
+    }
+
+    /**
+     * This method fixes weird msgfmt behaviour:
+     *
+     * An example of this weird behaviour:
+     * common/i18n/ru_RU/LC_MESSAGES/default.po:20684: inconsistent use of #~
+     * msgfmt: too many errors, aborting
+     *
+     * @param Translations $translations
+     * @return Translations
+     */
+    private function removeMalformedDisabledTranslactions(Translations $translations)
+    {
+        $removedIndexes = [];
+        $newTranslations = clone $translations;
+
+        foreach ($translations as $i => $translation) {
+            /**
+             * @var Translation $translation
+             */
+            if ($translation->isDisabled()) {
+                $isBeginningWithWhitespace =
+                    preg_match("/^\s+/uis", $translation->getOriginal()) ||
+                    preg_match("/^\s+/uis", $translation->getTranslation());
+
+
+                if ($isBeginningWithWhitespace) {
+                    $newTranslations->offsetUnset($i);
+                    $removedIndexes[] = $i;
+                }
+            }
+        }
+        return $newTranslations;
+    }
+
+
+
 }

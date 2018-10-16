@@ -11,7 +11,8 @@
         "gettext/gettext": "^4.6",
         "anujrnair/php-json-marshaller": "^1.0",
         "splitbrain/php-cli": "^1.1",
-        "guzzlehttp/guzzle": "~6.0"
+        "guzzlehttp/guzzle": "~6.0",
+        "php": "^7.0"
     },
     "autoload": {
         "psr-4": {"TranslationMergeTool\\": "src/"}
