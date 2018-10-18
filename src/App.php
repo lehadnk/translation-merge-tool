@@ -74,8 +74,7 @@ class App extends CLI
          * @var $affectedTranslationFiles TranslationFile[]
          */
         $affectedTranslationFiles = [];
-
-        //$parser = new Parser($this->config);
+        
         foreach ($this->config->components as $component) {
             $this->info("Parsing component {$component->name}...");
 
