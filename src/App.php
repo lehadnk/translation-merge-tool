@@ -121,7 +121,8 @@ class App extends CLI
 
                 $addedStringsCount = count($addedStrings);
                 $addedStringsStr = implode("\n\t", $addedStrings);
-                $this->debug("Added $addedStringsCount new strings: \n $addedStringsStr\n\n");
+                $this->info("Added $addedStringsCount new strings!");
+                $this->debug("$addedStringsStr\n\n");
             }
         }
 
