@@ -121,7 +121,7 @@ class App extends CLI
 
                 $addedStringsCount = count($addedStrings);
                 $addedStringsStr = implode("\n\t", $addedStrings);
-                $this->info("Added $addedStringsCount new strings: \n $addedStringsStr\n\n");
+                $this->debug("Added $addedStringsCount new strings: \n $addedStringsStr\n\n");
             }
         }
 
@@ -132,7 +132,13 @@ class App extends CLI
     {
         $this->info("Pushing updated files to bitbucket...");
         foreach ($affectedTranslationFiles as $translationFile) {
-            $this->bitbucketAPI->pushFile($translationFile->relativePath, $translationFile->absolutePath, $this->config->translationBranchName);
+            $result = $this->bitbucketAPI->pushFile($translationFile->relativePath, $translationFile->absolutePath);
+            if ($result->getStatusCode() !== 201) {
+                $this->error("Unable to push {$translationFile->relativePath} to the repository!");
+                $this->debug($result->getStatusCode());
+                $this->debug($result->getReasonPhrase());
+                exit(2);
+            }
         }
     }
 
@@ -149,9 +155,7 @@ class App extends CLI
         $this->info("Downloading new translation files from weblate...");
         foreach ($affectedTranslationFiles as $translationFile) {
             $oldFileHash = md5(file_get_contents($translationFile->absolutePath));
-
             $fileContents = $this->weblateAPI->downloadTranslation($translationFile->weblateCode);
-
             $newFileHash = md5($fileContents);
 
             if ($oldFileHash == $newFileHash) {
@@ -160,7 +164,6 @@ class App extends CLI
                 $this->info("Updating {$translationFile->absolutePath}...");
                 $totalUpdated++;
             }
-
 
             $fileContents = $this->postProcessPoFile($fileContents);
 
@@ -174,7 +177,7 @@ class App extends CLI
             exec("msgfmt -o $moPath {$translationFile->absolutePath}");
         }
 
-        $this->info("Total updated tranlsation files: $totalUpdated / $total");
+        $this->info("Total updated translation files: $totalUpdated / $total");
     }
 
     private function getVersion()
@@ -187,7 +190,7 @@ class App extends CLI
     {
         $translations = Translations::fromPoString($poFileContents);
 
-        $translations = $this->removeMalformedDisabledTranslactions($translations);
+        $translations = $this->removeMalformedTranslations($translations);
 
         return $translations->toPoString();
     }
@@ -202,7 +205,7 @@ class App extends CLI
      * @param Translations $translations
      * @return Translations
      */
-    private function removeMalformedDisabledTranslactions(Translations $translations)
+    private function removeMalformedTranslations(Translations $translations)
     {
         $removedIndexes = [];
         $newTranslations = clone $translations;
