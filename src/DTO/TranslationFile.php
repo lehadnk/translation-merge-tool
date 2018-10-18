@@ -25,4 +25,9 @@ class TranslationFile
      * @var string
      */
     public $weblateCode;
+
+    public function getAbsolutePathToMo()
+    {
+        return preg_replace("/\.po$/", ".mo", $this->absolutePath);
+    }
 }

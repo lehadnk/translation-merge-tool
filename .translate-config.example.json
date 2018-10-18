@@ -30,7 +30,7 @@
   "bitbucketPassword": "password",
   "bitbucketRepository": "nevidimov/giftd-crm",
 
-  "translationBranchName": "translation-test",
+  "translationBranchName": "translation",
 
   "weblateServiceUrl": "http://159.65.200.211",
   "weblateProjectSlug": "crm",
