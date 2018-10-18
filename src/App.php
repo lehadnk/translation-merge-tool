@@ -46,6 +46,8 @@ class App extends CLI
     {
         $options->setHelp('A tool for merging translation files for giftd projects');
         $options->registerOption('version', 'print version', 'v');
+        $options->registerOption('just-parse', 'just parse code, no further actions', 'j');
+        $options->registerOption('weblate-pull', 'just pull weblate, no other actions', 'w');
     }
 
     protected function main(Options $options)
@@ -70,6 +72,23 @@ class App extends CLI
     }
 
     private function updateTranslations()
+    {
+        if ($this->options->getOpt('weblate-pull')) {
+            $this->pullWeblateComponent();
+            return;
+        }
+
+        $affectedTranslationFiles = $this->parseSources();
+        if ($this->options->getOpt('just-parse')) {
+            return;
+        }
+
+        $this->pushToBitbucket($affectedTranslationFiles);
+        $this->pullWeblateComponent();
+        $this->downloadTranslations($affectedTranslationFiles);
+    }
+
+    public function parseSources()
     {
         $this->info("Parsing code base...");
 
@@ -106,15 +125,25 @@ class App extends CLI
             }
         }
 
+        return $affectedTranslationFiles;
+    }
+
+    private function pushToBitbucket(array $affectedTranslationFiles)
+    {
         $this->info("Pushing updated files to bitbucket...");
         foreach ($affectedTranslationFiles as $translationFile) {
             $this->bitbucketAPI->pushFile($translationFile->relativePath, $translationFile->absolutePath, $this->config->translationBranchName);
         }
+    }
 
+    private function pullWeblateComponent()
+    {
         $this->info("Pulling the weblate components...");
         $this->weblateAPI->pullComponent();
+    }
 
-
+    private function downloadTranslations(array $affectedTranslationFiles)
+    {
         $totalUpdated = 0;
         $total = count($affectedTranslationFiles);
         $this->info("Downloading new translation files from weblate...");
