@@ -47,7 +47,7 @@ class App extends CLI
         $options->setHelp('A tool for merging translation files for giftd projects');
         $options->registerOption('version', 'print version', 'v');
         $options->registerOption('just-parse', 'just parse code, no further actions', 'j');
-        $options->registerOption('weblate-pull', 'just pull weblate, no other actions', 'w');
+        $options->registerOption('weblate-pull', 'just pull Weblate, no other actions', 'w');
     }
 
     protected function main(Options $options)
@@ -78,14 +78,41 @@ class App extends CLI
             return;
         }
 
-        $affectedTranslationFiles = $this->parseSources();
         if ($this->options->getOpt('just-parse')) {
+            $this->parseSources();
             return;
         }
 
+        $this->commitAndPushWeblateComponent();
+
+        // We need to get latest translations from Weblate before we parse the files, because we don't want
+        // to lose translated strings by pushing empty translations
+        $this->downloadTranslations($this->getAllTranslationFiles());
+
+        $affectedTranslationFiles = $this->parseSources();
         $this->pushToBitbucket($affectedTranslationFiles);
         $this->pullWeblateComponent();
         $this->downloadTranslations($affectedTranslationFiles);
+    }
+
+    private function getAllTranslationFiles()
+    {
+        /**
+         * @var $allTranslationFiles TranslationFile[]
+         */
+        $allTranslationFiles = [];
+
+        foreach ($this->config->components as $component) {
+            foreach($this->config->locales as $locale) {
+                $translationFile = new TranslationFile();
+                $translationFile->relativePath = $component->getTranslationFileName($locale->localeName);
+                $translationFile->absolutePath = $this->workingDir.'/'.$translationFile->relativePath;
+                $translationFile->weblateCode = $locale->weblateCode;
+                $allTranslationFiles[] = $translationFile;
+            }
+        }
+
+        return $allTranslationFiles;
     }
 
     public function parseSources()
@@ -143,9 +170,18 @@ class App extends CLI
         }
     }
 
+    private function commitAndPushWeblateComponent()
+    {
+        $this->info("Committing the current state of Weblate component...");
+        $this->weblateAPI->commitComponent();
+
+        $this->info("Pushing the current state of Weblate component...");
+        $this->weblateAPI->pushComponent();
+    }
+
     private function pullWeblateComponent()
     {
-        $this->info("Pulling the weblate components...");
+        $this->info("Pulling the Weblate component...");
         $this->weblateAPI->pullComponent();
     }
 
@@ -153,7 +189,7 @@ class App extends CLI
     {
         $totalUpdated = 0;
         $total = count($affectedTranslationFiles);
-        $this->info("Downloading new translation files from weblate...");
+        $this->info("Downloading new translation files from Weblate...");
         foreach ($affectedTranslationFiles as $translationFile) {
             $oldFileHash = md5(file_get_contents($translationFile->absolutePath));
             $fileContents = $this->weblateAPI->downloadTranslation($translationFile->weblateCode);

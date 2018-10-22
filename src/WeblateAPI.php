@@ -51,6 +51,40 @@ class WeblateAPI
         ]);
     }
 
+    public function commitComponent() {
+        $this->httpClient->post(
+            "components/{$this->projectSlug}/{$this->componentSlug}/repository/",
+            [
+                'multipart' => [
+                    [
+                        'name' => 'operation',
+                        'contents' => 'commit',
+                    ]
+                ],
+                'headers' => [
+                    'Authorization' => 'Token '.$this->token,
+                ]
+            ]
+        );
+    }
+
+    public function pushComponent() {
+        $this->httpClient->post(
+            "components/{$this->projectSlug}/{$this->componentSlug}/repository/",
+            [
+                'multipart' => [
+                    [
+                        'name' => 'operation',
+                        'contents' => 'push',
+                    ]
+                ],
+                'headers' => [
+                    'Authorization' => 'Token '.$this->token,
+                ]
+            ]
+        );
+    }
+
     /**
      *
      *
