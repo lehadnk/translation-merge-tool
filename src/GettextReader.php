@@ -15,6 +15,9 @@ use TranslationMergeTool\DTO\TranslationString;
 
 class GettextReader
 {
+    /**
+     * @var Translation[]
+     */
     private $translations;
 
     public function __construct(string $fileName)
@@ -46,5 +49,33 @@ class GettextReader
         $this->translations->toPoFile($fileName);
 
         return $addedStrings;
+    }
+
+    private function getBranchNameByTranslation(Translation $translation)
+    {
+        foreach ($translation->getComments() as $comment) {
+            if (strpos($comment, "Branch: ") === 0) {
+                $branchName = str_replace("Branch: ", "", $comment);
+                return trim(mb_strtolower($branchName));
+            }
+        }
+        return null;
+    }
+
+    public function getUntranslatedStringsAddedInBranch($branchName)
+    {
+        $result = [];
+        $branchName = trim(mb_strtolower($branchName));
+        foreach ($this->translations as $translation) {
+            if ($translation->isDisabled() || $translation->getTranslation()) {
+                continue;
+            }
+            $translationAddedInBranch = $this->getBranchNameByTranslation($translation);
+            if ($translationAddedInBranch === $branchName) {
+                $result[] = $translation->getOriginal();
+            }
+        }
+
+        return $result;
     }
 }

@@ -48,6 +48,7 @@ class App extends CLI
         $options->registerOption('version', 'print version', 'v');
         $options->registerOption('just-parse', 'just parse code, no further actions', 'j');
         $options->registerOption('weblate-pull', 'just pull Weblate, no other actions', 'w');
+        $options->registerOption('print-untranslated', 'print all untranslated strings from current branch');
     }
 
     protected function main(Options $options)
@@ -83,6 +84,11 @@ class App extends CLI
             return;
         }
 
+        if ($this->options->getOpt('check')) {
+            $this->listAllUntranslatedStringsFromTheCurrentBranch();
+            return;
+        }
+
         $this->commitAndPushWeblateComponent();
 
         // We need to get latest translations from Weblate before we parse the files, because we don't want
@@ -93,6 +99,7 @@ class App extends CLI
         $this->pushToBitbucket($affectedTranslationFiles);
         $this->pullWeblateComponent();
         $this->downloadTranslations($affectedTranslationFiles);
+        $this->listAllUntranslatedStringsFromTheCurrentBranch();
     }
 
     private function getAllTranslationFiles()
@@ -115,6 +122,52 @@ class App extends CLI
         return $allTranslationFiles;
     }
 
+    public function listAllUntranslatedStringsFromTheCurrentBranch()
+    {
+        $currentBranchName = $this->getCurrentBranchName();
+        $translations = $this->getAllTranslationFiles();
+
+        $this->info("Untranslated string counts from $currentBranchName:");
+
+        $uniqueUntranslatedStrings = [];
+
+        foreach ($translations as $translation) {
+            $reader = new GettextReader($translation->absolutePath);
+            $untranslated = $reader->getUntranslatedStringsAddedInBranch($currentBranchName);
+
+            $uniqueUntranslatedStrings = array_merge($uniqueUntranslatedStrings, $untranslated);
+
+            $message = mb_strtoupper(substr($translation->weblateCode, 0, 2)) . "\t" . count($untranslated);
+            if ($untranslated > 0) {
+                $this->warning($message);
+            } else {
+                $this->success($message);
+            }
+
+            if ($this->options->getOpt('print-untranslated')) {
+                foreach ($untranslated as $string) {
+                    $this->info($string);
+                }
+            }
+        }
+
+        if ($uniqueUntranslatedStrings) {
+            if (!$this->options->getOpt('print-untranslated')) {
+                $this->info("Run this command to print the list of untranslated strings:");
+                $this->info("i18n_mrg --print-untranslated");
+            }
+
+            $this->warning("");
+            $this->warning("Don't create PR until untranslated string count for RU is 0");
+            $this->warning("");
+        }
+    }
+
+    private function getCurrentBranchName()
+    {
+        return trim(`git rev-parse --abbrev-ref HEAD`);
+    }
+
     public function parseSources()
     {
         $this->info("Parsing code base...");
@@ -124,7 +177,7 @@ class App extends CLI
          */
         $affectedTranslationFiles = [];
 
-        $currentBranchName = trim(`git rev-parse --abbrev-ref HEAD`);
+        $currentBranchName = $this->getCurrentBranchName();
         foreach ($this->config->components as $component) {
             $this->info("Parsing component {$component->name}...");
 
