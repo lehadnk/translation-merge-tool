@@ -23,9 +23,9 @@ class ConfigFactory
          */
         $config = $marshaller->unmarshall($contents, Config::class);
 
-        $config->vcsAuthToken = $config->vcsAuthToken ?? getenv('VCS_AUTH_TOKEN');
-        $config->vcsUsername = $config->vcsUsername ?? getenv('VCS_USERNAME');
-        $config->vcsPassword = $config->vcsPassword ?? getenv('VCS_PASSWORD');
+        $config->vcsAuthToken = $config->vcsAuthToken ?? getenv('I18N_MRG_VCS_AUTH_TOKEN');
+        $config->vcsUsername = $config->vcsUsername ?? getenv('I18N_MRG_VCS_USERNAME');
+        $config->vcsPassword = $config->vcsPassword ?? getenv('I18N_MRG_VCS_PASSWORD');
 
         return $config;
     }
