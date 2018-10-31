@@ -1,19 +1,4 @@
 {
-  "locales": [
-    {
-      "weblateCode": "ru",
-      "localeName": "ru_RU"
-    },
-    {
-      "weblateCode": "tr",
-      "localeName": "tr_TR"
-    },
-    {
-      "weblateCode": "zh",
-      "localeName": "zh_CN"
-    }
-  ],
-
   "components": [
     {
       "name": "default",
@@ -26,9 +11,11 @@
     }
   ],
 
-  "bitbucketUsername": "lehadnk@gmail.com",
-  "bitbucketPassword": "password",
-  "bitbucketRepository": "nevidimov/giftd-crm",
+  "vcs": "bitbucket",
+  "vcsUsername": "lehadnk@gmail.com",
+  "vcsPassword": "password",
+  "vcsRepository": "nevidimov/giftd-crm",
+  "vcsAuthToken": "token",
 
   "translationBranchName": "translation",
 

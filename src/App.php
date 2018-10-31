@@ -14,6 +14,8 @@ use Gettext\Translations;
 
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
+use TranslationMergeTool\API\VcsApiFactory;
+use TranslationMergeTool\API\VcsApiInterface;
 use TranslationMergeTool\CodeParser\Parser;
 use TranslationMergeTool\ComposerJson\ComposerJsonFactory;
 use TranslationMergeTool\Config\Config;
@@ -33,9 +35,9 @@ class App extends CLI
     private $config;
 
     /**
-     * @var BitbucketAPI
+     * @var VcsApiInterface
      */
-    private $bitbucketAPI;
+    private $vcsAPI;
 
     /**
      * @var WeblateAPI
@@ -65,7 +67,7 @@ class App extends CLI
         }
         $this->config = ConfigFactory::read($configFileName);
 
-        $this->bitbucketAPI = new BitbucketAPI($this->config);
+        $this->vcsAPI = VcsApiFactory::make($this->config);
         $this->weblateAPI = new WeblateAPI($this->config);
         $this->workingDir = getcwd();
 
@@ -96,7 +98,7 @@ class App extends CLI
         $this->downloadTranslations($this->getAllTranslationFiles());
 
         $affectedTranslationFiles = $this->parseSources();
-        $this->pushToBitbucket($affectedTranslationFiles);
+        $this->pushToVcs($affectedTranslationFiles);
         $this->pullWeblateComponent();
         $this->downloadTranslations($affectedTranslationFiles);
         $this->listAllUntranslatedStringsFromTheCurrentBranch();
@@ -110,7 +112,7 @@ class App extends CLI
         $allTranslationFiles = [];
 
         foreach ($this->config->components as $component) {
-            foreach($this->config->locales as $locale) {
+            foreach($component->getLocaleList($this->workingDir) as $locale) {
                 $translationFile = new TranslationFile();
                 $translationFile->relativePath = $component->getTranslationFileName($locale->localeName);
                 $translationFile->absolutePath = $this->workingDir.'/'.$translationFile->relativePath;
@@ -187,7 +189,7 @@ class App extends CLI
             $this->info(count($strings)." unique strings found!");
 
             $this->info("Parsing translation files...");
-            foreach($this->config->locales as $locale) {
+            foreach($component->getLocaleList($this->workingDir) as $locale) {
                 $this->info("Parsing locale - {$locale->localeName}...");
 
                 $translationFile = new TranslationFile();
@@ -209,17 +211,20 @@ class App extends CLI
         return $affectedTranslationFiles;
     }
 
-    private function pushToBitbucket(array $affectedTranslationFiles)
+    private function pushToVcs(array $affectedTranslationFiles)
     {
-        $this->info("Pushing updated files to bitbucket...");
+        $this->info("Pushing updated files to {$this->config->vcs}...");
         foreach ($affectedTranslationFiles as $translationFile) {
-            $result = $this->bitbucketAPI->pushFile($translationFile->relativePath, $translationFile->absolutePath);
-            if ($result->getStatusCode() !== 201) {
-                $this->error("Unable to push {$translationFile->relativePath} to the repository!");
-                $this->debug($result->getStatusCode());
-                $this->debug($result->getReasonPhrase());
-                exit(2);
-            }
+            $this->vcsAPI->addFile($translationFile->absolutePath, $translationFile->relativePath);
+        }
+
+        $result = $this->vcsAPI->commit();
+
+        if ($result->getStatusCode() !== 201) {
+            $this->error("Unable to push {$translationFile->relativePath} to the repository!");
+            $this->debug($result->getStatusCode());
+            $this->debug($result->getReasonPhrase());
+            exit(2);
         }
     }
 

@@ -13,19 +13,30 @@ use PhpJsonMarshaller\Annotations\MarshallProperty;
 class Config
 {
     /**
-     * @MarshallProperty(name="bitbucketUsername", type="string")
+     * @MarshallProperty(name="vcs", type="string")
+     * @var Component[]
      */
-    public $bitbucketUsername;
+    public $vcs;
 
     /**
-     * @MarshallProperty(name="bitbucketPassword", type="string")
+     * @MarshallProperty(name="vcsUsername", type="string")
      */
-    public $bitbucketPassword;
+    public $vcsUsername;
 
     /**
-     * @MarshallProperty(name="bitbucketRepository", type="string")
+     * @MarshallProperty(name="vcsPassword", type="string")
      */
-    public $bitbucketRepository;
+    public $vcsPassword;
+
+    /**
+     * @MarshallProperty(name="vcsRepository", type="string")
+     */
+    public $vcsRepository;
+
+    /**
+     * @MarshallProperty(name="vcsAuthToken", type="string")
+     */
+    public $vcsAuthToken;
 
     /**
      * @MarshallProperty(name="translationBranchName", type="string")
@@ -51,12 +62,6 @@ class Config
      * @MarshallProperty(name="weblateAuthToken", type="string")
      */
     public $weblateAuthToken;
-
-    /**
-     * @MarshallProperty(name="locales", type="\TranslationMergeTool\Config\Locale[]")
-     * @var Locale[]
-     */
-    public $locales;
 
     /**
      * @MarshallProperty(name="components", type="\TranslationMergeTool\Config\Component[]")
