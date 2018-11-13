@@ -6,7 +6,7 @@
  * Time: 2:32 PM
  */
 
-namespace TranslationMergeTool;
+namespace TranslationMergeTool\API;
 
 
 use GuzzleHttp\Client;

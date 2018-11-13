@@ -10,7 +10,6 @@ namespace TranslationMergeTool\API;
 
 
 use splitbrain\phpcli\Exception;
-use TranslationMergeTool\BitbucketAPI;
 use TranslationMergeTool\Config\Config;
 
 class VcsApiFactory
