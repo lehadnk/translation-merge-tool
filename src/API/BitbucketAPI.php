@@ -35,26 +35,24 @@ class BitbucketAPI extends VcsApiAbstract implements VcsApiInterface
      */
     public function commit(): ResponseInterface
     {
-        $payload = [
-            [
-                'name' => 'branch',
-                'contents' => $this->config->translationBranchName,
-            ],
-        ];
-
+        $response = null;
         foreach ($this->fileList as $fileName => $remoteFileName) {
-            $payload[] = [
-                'name' => $remoteFileName,
-                'contents' => file_get_contents($fileName),
-            ];
+            $response = $this->httpClient->post(
+                "repositories/{$this->config->vcsRepository}/src",
+                [
+                    'multipart' => [
+                        [
+                            'name' => 'branch',
+                            'contents' => $this->config->translationBranchName,
+                        ],
+                        [
+                            'name' => $remoteFileName,
+                            'contents' => file_get_contents($fileName),
+                        ]
+                    ]
+                ]
+            );
         }
-
-        $response = $this->httpClient->post(
-            "repositories/{$this->config->vcsRepository}/src",
-            [
-                'multipart' => $payload,
-            ]
-        );
 
         return $response;
     }

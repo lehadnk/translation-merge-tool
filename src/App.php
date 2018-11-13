@@ -67,6 +67,12 @@ class App extends CLI
         }
         $this->config = ConfigFactory::read($configFileName);
 
+        if (!$this->doConfigVersionCheck()) {
+            $this->error("Error! Your i18n_mrg tool has version {$this->getVersion()} while minimum version requirement declared in .translate-config.json is {$this->config->minVersion}. Please consider running:");
+            $this->info("composer global update giftd/translation-merge-tool");
+            return;
+        }
+
         $this->vcsAPI = VcsApiFactory::make($this->config);
         $this->weblateAPI = new WeblateAPI($this->config);
         $this->workingDir = getcwd();
@@ -324,6 +330,12 @@ class App extends CLI
         return $newTranslations;
     }
 
+    private function doConfigVersionCheck(): bool
+    {
+        $configVersion = str_replace('.', '', $this->config->minVersion);
+        $toolVersion = str_replace('.', '', $this->getVersion());
 
+        return (int) $configVersion <= (int) $toolVersion;
+    }
 
 }

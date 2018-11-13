@@ -13,6 +13,11 @@ use PhpJsonMarshaller\Annotations\MarshallProperty;
 class Config
 {
     /**
+     * @MarshallProperty(name="minVersion", type="string")
+     */
+    public $minVersion;
+
+    /**
      * @MarshallProperty(name="vcs", type="string")
      * @var Component[]
      */

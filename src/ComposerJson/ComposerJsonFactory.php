@@ -25,7 +25,6 @@ class ComposerJsonFactory
     {
         $contents = file_get_contents(__DIR__.'/../../composer.json');
 
-
         $marshaller = new JsonMarshaller(new ClassDecoder(new DoctrineAnnotationReader()));
         $composerJson = $marshaller->unmarshall($contents, ComposerJson::class);
 
