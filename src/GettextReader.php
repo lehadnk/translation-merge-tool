@@ -18,11 +18,17 @@ class GettextReader
     /**
      * @var Translation[]
      */
-    private $translations;
+    public $translations;
+
+    /**
+     * @var string
+     */
+    private $fileName;
 
     public function __construct(string $fileName)
     {
         $this->translations = Translations::fromPoFile($fileName);
+        $this->fileName = $fileName;
     }
 
     /**
@@ -49,6 +55,11 @@ class GettextReader
         $this->translations->toPoFile($fileName);
 
         return $addedStrings;
+    }
+
+    public function save()
+    {
+        $this->translations->toPoFile($this->fileName);
     }
 
     private function getBranchNameByTranslation(Translation $translation)

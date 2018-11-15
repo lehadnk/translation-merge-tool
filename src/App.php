@@ -51,6 +51,7 @@ class App extends CLI
         $options->registerOption('just-parse', 'just parse code, no further actions', 'j');
         $options->registerOption('weblate-pull', 'just pull Weblate, no other actions', 'w');
         $options->registerOption('print-untranslated', 'print all untranslated strings from current branch');
+        $options->registerOption('prune', 'mark all non-existing strings in project as disabled');
     }
 
     protected function main(Options $options)
@@ -68,8 +69,7 @@ class App extends CLI
         $this->config = ConfigFactory::read($configFileName);
 
         if (!$this->doConfigVersionCheck()) {
-            $this->error("Error! Your i18n_mrg tool has version {$this->getVersion()} while minimum version requirement declared in .translate-config.json is {$this->config->minVersion}. Please consider running:");
-            $this->info("composer global update giftd/translation-merge-tool");
+            $this->error("Error! Your i18n_mrg tool has version {$this->getVersion()} while minimum version requirement declared in .translate-config.json is {$this->config->minVersion}. Please consider running:".PHP_EOL."composer global update giftd/translation-merge-tool");
             return;
         }
 
@@ -94,6 +94,11 @@ class App extends CLI
 
         if ($this->options->getOpt('check')) {
             $this->listAllUntranslatedStringsFromTheCurrentBranch();
+            return;
+        }
+
+        if ($this->options->getOpt('prune')) {
+            $this->prune();
             return;
         }
 
@@ -123,6 +128,7 @@ class App extends CLI
                 $translationFile->relativePath = $component->getTranslationFileName($locale->localeName);
                 $translationFile->absolutePath = $this->workingDir.'/'.$translationFile->relativePath;
                 $translationFile->weblateCode = $locale->weblateCode;
+                $translationFile->component = $component;
                 $allTranslationFiles[] = $translationFile;
             }
         }
@@ -338,4 +344,58 @@ class App extends CLI
         return (int) $configVersion <= (int) $toolVersion;
     }
 
+    private function getCurrentBranch()
+    {
+        return trim(`git branch | grep \* | cut -d ' ' -f2`);
+    }
+
+    private function prune()
+    {
+        if ($this->getCurrentBranch() !== 'master') {
+            $this->error("The --prune argument could be run from master branch only! Please consider running: ".PHP_EOL."git checkout master");
+            return;
+        }
+
+        $this->info("Are you sure that you merged all the currently active feature branches in master?");
+        $confirmation = readline();
+
+        if (!($confirmation === 'Y' || $confirmation === 'y')) {
+            $this->error("You must merge all the current feature branches in master before running --prune command!");
+            return;
+        }
+
+        $this->commitAndPushWeblateComponent();
+        $translationFiles = $this->getAllTranslationFiles();
+        $this->downloadTranslations($translationFiles);
+
+        $totalDisabledStrings = [];
+        foreach ($translationFiles as $translationFile) {
+            $parser = new Parser($translationFile->component, $this->workingDir, 'master');
+            $translationStrings = $parser->getStrings();
+
+            $strings = [];
+            foreach ($translationStrings as $string) {
+                $strings[] = $string->originalString;
+            }
+
+            $reader = new GettextReader($translationFile->absolutePath);
+            $disabledTranslations = [];
+            foreach ($reader->translations as $translation) {
+                $original = $translation->getOriginal();
+                if (!in_array($original, $strings)) {
+                    $disabledTranslations[] = $original;
+                    $totalDisabledStrings[$original] = $original;
+                    $translation->setDisabled(true);
+                }
+            }
+            $reader->save();
+
+            $this->info($translationFile->relativePath.': '.count($disabledTranslations).' were disabled.');
+            foreach ($disabledTranslations as $ds) {
+                $this->debug($ds);
+            }
+        }
+
+        $this->success("Strings which are not used in the project are now marked as disabled. There are ".count($totalDisabledStrings)." of them in the project. You should now manually commit them if you're agree with the operation.");
+    }
 }

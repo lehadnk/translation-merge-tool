@@ -62,6 +62,9 @@ class Parser
         return $list;
     }
 
+    /**
+     * @return TranslationString[]
+     */
     public function getStrings(): array
     {
         $this->translationStrings = [];

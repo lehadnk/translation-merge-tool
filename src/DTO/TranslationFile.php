@@ -9,6 +9,8 @@
 namespace TranslationMergeTool\DTO;
 
 
+use TranslationMergeTool\Config\Component;
+
 class TranslationFile
 {
     /**
@@ -25,6 +27,11 @@ class TranslationFile
      * @var string
      */
     public $weblateCode;
+
+    /**
+     * @var Component
+     */
+    public $component;
 
     public function getAbsolutePathToMo()
     {
