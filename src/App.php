@@ -199,6 +199,9 @@ class App extends CLI
         return trim(`git rev-parse --abbrev-ref HEAD`);
     }
 
+    /**
+     * @return TranslationFile[]
+     */
     public function parseSources()
     {
         $this->info("Parsing code base...");
@@ -240,6 +243,9 @@ class App extends CLI
         return $affectedTranslationFiles;
     }
 
+    /**
+     * @param TranslationFile[] $affectedTranslationFiles
+     */
     private function pushToVcs(array $affectedTranslationFiles)
     {
         $this->info("Pushing updated files to {$this->config->vcs}...");
@@ -413,6 +419,9 @@ class App extends CLI
             }
         }
 
-        $this->success("Strings which are not used in the project are now marked as disabled. There are ".count($totalDisabledStrings)." of them in the project. You should now manually commit them if you're agree with the operation.");
+        $this->pushToVcs($translationFiles);
+        $this->pullWeblateComponent();
+
+        $this->success("Strings which are not used in the project are now marked as disabled. There are ".count($totalDisabledStrings)." of them in the project.");
     }
 }
