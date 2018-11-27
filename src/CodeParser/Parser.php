@@ -88,7 +88,11 @@ class Parser
         return preg_match('/[А-Яа-яЁё]/u', $string);
     }
 
-    public function parseFile(string $path)
+    /**
+     * @param string $path
+     * @return string[]
+     */
+    public function parseFile(string $path): array
     {
         $content = file_get_contents($path);
 
@@ -103,6 +107,7 @@ class Parser
             if ($this->hasCyryllicCharacters($string)) continue;
 
             $relativePath = substr($path, strlen($this->workingDir) + 1);
+            $result[] = $string;
             if (array_key_exists($string, $this->translationStrings)) {
                 $this->translationStrings[$string]->fileReferences[] = $relativePath;
             } else {

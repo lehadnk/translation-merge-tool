@@ -6,11 +6,14 @@
  * Time: 20:07
  */
 
-namespace TranslationMergeTool\API;
+namespace TranslationMergeTool\VcsAPI;
 
 
 use GuzzleHttp\Client;
 use TranslationMergeTool\Config\Config;
+use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
+use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
+use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 
 abstract class VcsApiAbstract
 {
@@ -34,9 +37,18 @@ abstract class VcsApiAbstract
      */
     protected $baseUri;
 
+    /**
+     * VcsApiAbstract constructor.
+     * @param Config $config
+     *
+     * @throws NoAuthTokenException
+     * @throws NoAuthTokenException
+     * @throws ConfigValidationException
+     */
     public function __construct(Config $config)
     {
         $this->config = $config;
+        $this->validateConfig();
         $this->httpClient = $this->createHttpClient();
     }
 
@@ -46,4 +58,11 @@ abstract class VcsApiAbstract
     {
         $this->fileList[$fileName] = $remoteFileName;
     }
+
+    /**
+     * @throws NoAuthTokenException
+     * @throws NoAuthCredentialsException
+     * @throws ConfigValidationException
+     */
+    abstract protected function validateConfig();
 }

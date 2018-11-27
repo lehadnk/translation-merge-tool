@@ -1,0 +1,29 @@
+{
+  "minVersion": "1.1.3",
+
+  "components": [
+    {
+      "name": "default",
+      "includeDirectories": [
+        "src/"
+      ],
+      "excludeDirectories": [
+        "src/excludedDirectory"
+      ],
+      "translationFileName": "translations/{localeName}/translation.po"
+    }
+  ],
+
+  "vcs": "bitbucket",
+  "vcsUsername": "test@bitbucket.user",
+  "vcsPassword": "test-password",
+  "vcsRepository": "test/repository",
+  "vcsAuthToken": "test-token",
+
+  "translationBranchName": "translation",
+
+  "weblateServiceUrl": "http://weblate-test-server.local",
+  "weblateProjectSlug": "crm",
+  "weblateComponentSlug": "main",
+  "weblateAuthToken": "token"
+}

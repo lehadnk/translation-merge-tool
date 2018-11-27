@@ -6,14 +6,24 @@
  * Time: 21:00
  */
 
-namespace TranslationMergeTool\API;
+namespace TranslationMergeTool\VcsAPI;
 
 
 use splitbrain\phpcli\Exception;
 use TranslationMergeTool\Config\Config;
+use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
+use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
+use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 
 class VcsApiFactory
 {
+    /**
+     * @param Config $config
+     * @return VcsApiInterface
+     * @throws ConfigValidationException
+     * @throws NoAuthTokenException
+     * @throws NoAuthCredentialsException
+     */
     public static function make(Config $config): VcsApiInterface
     {
         if ($config->vcs === 'bitbucket') {

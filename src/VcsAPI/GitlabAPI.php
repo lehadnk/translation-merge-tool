@@ -6,11 +6,12 @@
  * Time: 20:03
  */
 
-namespace TranslationMergeTool\API;
+namespace TranslationMergeTool\VcsAPI;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
+use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 
 class GitlabAPI extends VcsApiAbstract implements VcsApiInterface
 {
@@ -52,5 +53,12 @@ class GitlabAPI extends VcsApiAbstract implements VcsApiInterface
         return new Client([
             'base_uri' => $this->baseUri,
         ]);
+    }
+
+    protected function validateConfig()
+    {
+        if ($this->config->vcsAuthToken === null) {
+            throw new NoAuthTokenException();
+        }
     }
 }

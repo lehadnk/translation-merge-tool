@@ -6,7 +6,7 @@
  * Time: 20:01
  */
 
-namespace TranslationMergeTool\API;
+namespace TranslationMergeTool\VcsAPI;
 
 
 use Psr\Http\Message\ResponseInterface;

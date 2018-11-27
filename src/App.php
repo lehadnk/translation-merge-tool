@@ -14,8 +14,11 @@ use Gettext\Translations;
 
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
-use TranslationMergeTool\API\VcsApiFactory;
-use TranslationMergeTool\API\VcsApiInterface;
+use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
+use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
+use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
+use TranslationMergeTool\VcsAPI\VcsApiFactory;
+use TranslationMergeTool\VcsAPI\VcsApiInterface;
 use TranslationMergeTool\CodeParser\Parser;
 use TranslationMergeTool\ComposerJson\ComposerJsonFactory;
 use TranslationMergeTool\Config\Config;
@@ -73,7 +76,21 @@ class App extends CLI
             return;
         }
 
-        $this->vcsAPI = VcsApiFactory::make($this->config);
+        try {
+            $this->vcsAPI = VcsApiFactory::make($this->config);
+        } catch (NoAuthCredentialsException $ex) {
+            $this->error("Error! No {$this->config->vcs} authentication credentials found.");
+            $this->info("Please consider adding I18N_MRG_VCS_USERNAME and I18N_MRG_VCS_PASSWORD environment variables into your ~\.bash_profile");
+            exit(0);
+        } catch (NoAuthTokenException $ex) {
+            $this->error("Error! No {$this->config->vcs} authentication token found.");
+            $this->info("Please consider adding I18N_MRG_VCS_AUTH_TOKEN environment variable into your ~\.bash_profile");
+            exit(0);
+        } catch (ConfigValidationException $ex) {
+            $this->error($ex->getMessage());
+            exit(0);
+        }
+
         $this->weblateAPI = new WeblateAPI($this->config);
         $this->workingDir = getcwd();
 

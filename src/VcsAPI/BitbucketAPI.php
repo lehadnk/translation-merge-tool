@@ -6,13 +6,15 @@
  * Time: 2:32 PM
  */
 
-namespace TranslationMergeTool\API;
+namespace TranslationMergeTool\VcsAPI;
 
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
-use TranslationMergeTool\API\VcsApiAbstract;
-use TranslationMergeTool\API\VcsApiInterface;
+use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
+use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
+use TranslationMergeTool\VcsAPI\VcsApiAbstract;
+use TranslationMergeTool\VcsAPI\VcsApiInterface;
 
 class BitbucketAPI extends VcsApiAbstract implements VcsApiInterface
 {
@@ -63,5 +65,12 @@ class BitbucketAPI extends VcsApiAbstract implements VcsApiInterface
             'base_uri' => $this->baseUri,
             'auth' => [$this->config->vcsUsername, $this->config->vcsPassword],
         ]);
+    }
+
+    protected function validateConfig()
+    {
+        if (!$this->config->vcsUsername || !$this->config->vcsPassword) {
+            throw new NoAuthCredentialsException();
+        }
     }
 }
