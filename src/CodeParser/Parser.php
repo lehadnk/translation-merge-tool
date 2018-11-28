@@ -41,25 +41,17 @@ class Parser
      */
     private $translationStrings = [];
 
+    /**
+     * @var FileLister
+     */
+    private $fileLister;
+
     public function __construct(Component $component, string $workingDir, string $branchName)
     {
         $this->component = $component;
         $this->workingDir = $workingDir;
         $this->branchName = $branchName;
-    }
-
-    private function getFileList(string $path): array
-    {
-        $directory = new \RecursiveDirectoryIterator($path);
-        $iterator = new \RecursiveIteratorIterator($directory);
-        $fileList = new \RegexIterator($iterator, '/^.+\.(?:php|js|vue)$/i', \RegexIterator::GET_MATCH);
-
-        $list = [];
-        foreach ($fileList as $file) {
-            $list[] = $file[0];
-        }
-
-        return $list;
+        $this->fileLister = new FileLister();
     }
 
     /**
@@ -68,22 +60,15 @@ class Parser
     public function getStrings(): array
     {
         $this->translationStrings = [];
-        foreach($this->component->includeDirectories as $directory) {
-            $path = $this->workingDir.'/'.$directory;
-            $fileList = $this->getFileList($path);
-            if ($this->component->excludeDirectories) {
-                $fileList = $this->filterFileList($fileList, $this->component->excludeDirectories, $this->workingDir);
-            }
 
-            foreach($fileList as $fileInfo) {
-                $this->parseFile($fileInfo);
-            }
+        foreach($this->fileLister->getFileList($this->component, $this->workingDir) as $file) {
+            $this->parseFile($file);
         }
 
         return $this->translationStrings;
     }
 
-    private function hasCyryllicCharacters($string)
+    private function hasCyryllicCharacters($string): bool
     {
         return preg_match('/[А-Яа-яЁё]/u', $string);
     }
@@ -118,22 +103,5 @@ class Parser
         return $result;
     }
 
-    private function filterFileList(array $fileList, array $excludeDirectories, string $workingDir)
-    {
-        $filteredList = [];
-        foreach ($fileList as $path) {
-            $excluded = false;
 
-            foreach ($excludeDirectories as $excludeDirectory) {
-                $searchSubstr = $workingDir . '/' . $excludeDirectory;
-                if (substr($path, 0, strlen($searchSubstr)) === $searchSubstr) $excluded = true;
-            }
-
-            if (!$excluded) {
-                $filteredList[] = $path;
-            }
-        }
-
-        return $filteredList;
-    }
 }

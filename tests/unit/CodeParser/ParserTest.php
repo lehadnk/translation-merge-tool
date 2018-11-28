@@ -6,17 +6,13 @@
  * Time: 18:45
  */
 
-namespace CodeParser;
+namespace unit\CodeParser;
 
-use PHPUnit\Framework\TestCase;
 use TranslationMergeTool\CodeParser\Parser;
-use TranslationMergeTool\Config\Component;
-use TranslationMergeTool\Config\ConfigFactory;
+use UnitTests\AbstractTestProjectCase;
 
-class ParserTest extends TestCase
+class ParserTest extends AbstractTestProjectCase
 {
-    private $config;
-
     /**
      * @var Parser
      */
@@ -24,14 +20,8 @@ class ParserTest extends TestCase
 
     public function setUp()
     {
-        $config = ConfigFactory::read($this->getTestProjectDir().'/.translate-config.json');
-        $component = $config->components[0];
-        $this->parser = new Parser($component, $this->getTestProjectDir(), 'test');
-    }
-
-    private function getTestProjectDir()
-    {
-        return __DIR__.'/../project';
+        parent::setUp();
+        $this->parser = new Parser($this->getTestComponent(), $this->getTestProjectDir(), 'test');
     }
 
     public function testGetStrings()
@@ -39,6 +29,7 @@ class ParserTest extends TestCase
         $strings = $this->parser->getStrings();
         $this->assertTrue(array_key_exists('This translation is included in the project', $strings));
         $this->assertFalse(array_key_exists('This translation is excluded from the project', $strings));
+        $this->assertFalse(array_key_exists('This string is excluded from git', $strings));
     }
 
     public function testParseFile()
