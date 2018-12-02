@@ -31,7 +31,13 @@ class FileLister
         $result = [];
         foreach($component->includeDirectories as $path) {
             $directoryList = $this->getFilesInPath($workingDir.'/'.$path);
-            $filteredList = $this->filterFileList($directoryList, $component->excludeDirectories, $workingDir);
+
+            /**
+             * @todo Do something with marshaller - it parses empty json array as null value
+             */
+            $excludeDirectories = $component->excludeDirectories ?? [];
+
+            $filteredList = $this->filterFileList($directoryList, $excludeDirectories, $workingDir);
             $result = array_merge($result, $filteredList);
         }
 

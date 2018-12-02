@@ -6,7 +6,7 @@
  * Time: 10:53 PM
  */
 
-namespace TranslationMergeTool;
+namespace TranslationMergeTool\PoReader;
 
 
 use Gettext\Translation;
@@ -40,7 +40,8 @@ class GettextReader
     {
         $addedStrings = [];
         foreach ($translationStrings as $translationString) {
-            if (!$this->translations->offsetGet(Translation::generateId('', $translationString->originalString))) {
+            $id = Translation::generateId('', $translationString->originalString);
+            if (!isset($this->translations[$id])) {
                 $translation = new Translation('', $translationString->originalString);
                 $translation->addComment('Branch: '.$translationString->branchName);
                 foreach ($translationString->fileReferences as $reference) {
@@ -53,7 +54,6 @@ class GettextReader
         }
 
         $this->translations->toPoFile($fileName);
-
         return $addedStrings;
     }
 

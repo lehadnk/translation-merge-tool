@@ -22,6 +22,9 @@ class GitignoreReader
         }
 
         $contents = file_get_contents($workingDir.'/.gitignore');
-        return explode(PHP_EOL, $contents);
+        $strings = explode(PHP_EOL, $contents);
+        return array_filter($strings, function($string) {
+            return !empty($string);
+        });
     }
 }

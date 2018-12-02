@@ -6,7 +6,7 @@
  * Time: 5:05 AM
  */
 
-namespace TranslationMergeTool\ComposerJson;
+namespace TranslationMergeTool\Config\ComposerJson;
 
 use PhpJsonMarshaller\Annotations\MarshallProperty;
 

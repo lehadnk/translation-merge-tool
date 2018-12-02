@@ -8,22 +8,20 @@
 
 namespace TranslationMergeTool;
 
-
-use Gettext\Translation;
-use Gettext\Translations;
-
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
+use TranslationMergeTool\Config\ComposerJson\ComposerJsonFactory;
 use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
+use TranslationMergeTool\PoReader\PoPostProcessor;
 use TranslationMergeTool\VcsAPI\VcsApiFactory;
 use TranslationMergeTool\VcsAPI\VcsApiInterface;
 use TranslationMergeTool\CodeParser\Parser;
-use TranslationMergeTool\ComposerJson\ComposerJsonFactory;
 use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
 use TranslationMergeTool\DTO\TranslationFile;
+use TranslationMergeTool\PoReader\GettextReader;
 
 class App extends CLI
 {
@@ -47,6 +45,11 @@ class App extends CLI
      */
     private $weblateAPI;
 
+    /**
+     * @var int
+     */
+    private $newStringsTotal = 0;
+
     protected function setup(Options $options)
     {
         $options->setHelp('A tool for merging translation files for giftd projects');
@@ -55,6 +58,7 @@ class App extends CLI
         $options->registerOption('weblate-pull', 'just pull Weblate, no other actions', 'w');
         $options->registerOption('print-untranslated', 'print all untranslated strings from current branch');
         $options->registerOption('prune', 'mark all non-existing strings in project as disabled');
+        $options->registerOption('force', 'pushes sources to repository and pulls component, even if no changes are found', 'f');
     }
 
     protected function main(Options $options)
@@ -119,13 +123,19 @@ class App extends CLI
             return;
         }
 
-        $this->commitAndPushWeblateComponent();
+//        $this->commitAndPushWeblateComponent();
 
         // We need to get latest translations from Weblate before we parse the files, because we don't want
         // to lose translated strings by pushing empty translations
         $this->downloadTranslations($this->getAllTranslationFiles());
 
         $affectedTranslationFiles = $this->parseSources();
+
+        if ($this->newStringsTotal === 0 && !$this->options->getOpt('force')) {
+            $this->info('No changes found - aborting');
+            exit(0);
+        }
+
         $this->pushToVcs($affectedTranslationFiles);
         $this->pullWeblateComponent();
         $this->downloadTranslations($affectedTranslationFiles);
@@ -234,9 +244,21 @@ class App extends CLI
                 $addedStrings = $reader->addNewTranslations($strings, $translationFile->absolutePath);
 
                 $addedStringsCount = count($addedStrings);
+                $this->newStringsTotal += $addedStringsCount;
                 $addedStringsStr = implode("\n\t", $addedStrings);
                 $this->info("Added $addedStringsCount new strings!");
                 $this->debug("$addedStringsStr\n\n");
+            }
+        }
+
+        if ($this->newStringsTotal > 0) {
+            $this->warning("i18n_mrg found $this->newStringsTotal new strings which are going to be pushed to weblate now. Should we continue?");
+
+            $confirmation = readline();
+
+            if (!($confirmation === 'Y' || $confirmation === 'y')) {
+                $this->error("Aborting");
+                exit(0);
             }
         }
 
@@ -295,7 +317,8 @@ class App extends CLI
                 $totalUpdated++;
             }
 
-            $fileContents = $this->postProcessPoFile($fileContents);
+            $processor = new PoPostProcessor();
+            $fileContents = $processor->postProcessPoFile($fileContents);
 
             /**
              * @todo Здесь проверить что пришло с сервера перед записью!
@@ -314,49 +337,6 @@ class App extends CLI
     {
         $composerJson = ComposerJsonFactory::read();
         return $composerJson->version;
-    }
-
-    private function postProcessPoFile($poFileContents)
-    {
-        $translations = Translations::fromPoString($poFileContents);
-
-        $translations = $this->removeMalformedTranslations($translations);
-
-        return $translations->toPoString();
-    }
-
-    /**
-     * This method fixes weird msgfmt behaviour:
-     *
-     * An example of this weird behaviour:
-     * common/i18n/ru_RU/LC_MESSAGES/default.po:20684: inconsistent use of #~
-     * msgfmt: too many errors, aborting
-     *
-     * @param Translations $translations
-     * @return Translations
-     */
-    private function removeMalformedTranslations(Translations $translations)
-    {
-        $removedIndexes = [];
-        $newTranslations = clone $translations;
-
-        foreach ($translations as $i => $translation) {
-            /**
-             * @var Translation $translation
-             */
-            if ($translation->isDisabled()) {
-                $isBeginningWithWhitespace =
-                    preg_match("/^\s+/uis", $translation->getOriginal()) ||
-                    preg_match("/^\s+/uis", $translation->getTranslation());
-
-
-                if ($isBeginningWithWhitespace) {
-                    $newTranslations->offsetUnset($i);
-                    $removedIndexes[] = $i;
-                }
-            }
-        }
-        return $newTranslations;
     }
 
     private function doConfigVersionCheck(): bool

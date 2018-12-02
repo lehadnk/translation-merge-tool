@@ -6,7 +6,7 @@
  * Time: 5:06 AM
  */
 
-namespace TranslationMergeTool\ComposerJson;
+namespace TranslationMergeTool\Config\ComposerJson;
 
 
 use PhpJsonMarshaller\Decoder\ClassDecoder;
@@ -23,7 +23,7 @@ class ComposerJsonFactory
      */
     public static function read(): ComposerJson
     {
-        $contents = file_get_contents(__DIR__.'/../../composer.json');
+        $contents = file_get_contents(__DIR__ . '/../../../composer.json');
 
         $marshaller = new JsonMarshaller(new ClassDecoder(new DoctrineAnnotationReader()));
         $composerJson = $marshaller->unmarshall($contents, ComposerJson::class);

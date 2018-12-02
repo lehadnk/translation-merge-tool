@@ -1,0 +1,41 @@
+#: console/commands/ExternalCallCommand.php:101
+#, php-format
+msgid "Partner %s is missing our JS code!"
+msgstr "У партнера %s исчез наш js код!"
+
+#: console/commands/ExternalCallCommand.php:109
+#, php-format
+msgid "Partner %s now has our JS code!"
+msgstr "У партнера %s появился наш js код!"
+
+#: console/commands/GiftCommand.php:490
+#, php-format
+#msgid ""
+"We appreciate your trust and give you again \n"
+"a promo code for %s discount !"
+#msgstr ""
+"Мы ценим ваше доверие и снова дарим вам \n"
+" промо-код на скидку %s!"
+
+#: console/commands/InvoiceReminderCommand.php:66
+#, php-format
+msgid "Reminder for unpaid bill %s "
+msgstr "Напоминание о неоплаченном счете %s"
+
+#: frontend/modules/widgets/views/layouts/_editor.php:160
+#~ msgid ""
+"We've noticed that you've deleted or changed one of the numbers in the text. \n"
+"\n"
+"If this was a discount amount or minimum order value, you should cancel changes in the text, and then edit corresponding numbers in the GIFTD configuration wizard.\n"
+"\n"
+"Apply changes?"
+#~ msgstr ""
+"Мы заметили, что вы удалили или изменили одно из чисел в тексте. \n"
+"\n"
+"Если это была сумма скидки или значение минимального заказа — отмените изменения в тексте и отредактируйте нужные параметры в мастере по настройке решений GIFTD.\n"
+"\n"
+"Применить изменения?"
+
+#: frontend/modules/widgets/views/layouts/_right-pane-card.php:16
+msgid "You are able to load any image for the promo card"
+msgstr "Вы можете загрузить любое изображение промо-карты"
