@@ -123,7 +123,7 @@ class App extends CLI
             return;
         }
 
-//        $this->commitAndPushWeblateComponent();
+        $this->commitAndPushWeblateComponent();
 
         // We need to get latest translations from Weblate before we parse the files, because we don't want
         // to lose translated strings by pushing empty translations
@@ -252,7 +252,7 @@ class App extends CLI
         }
 
         if ($this->newStringsTotal > 0) {
-            $this->warning("i18n_mrg found $this->newStringsTotal new strings which are going to be pushed to weblate now. Should we continue?");
+            $this->warning("i18n_mrg found $this->newStringsTotal new strings which are going to be pushed to weblate now. Should we continue? (Y/n)");
 
             $confirmation = readline();
 
