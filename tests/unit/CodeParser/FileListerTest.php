@@ -23,6 +23,7 @@ class FileListerTest extends AbstractTestProjectCase
         $this->assertTrue(in_array($this->getFullPath('src/includedDirectory/IncludedFile.php'), $fileList));
         $this->assertFalse(in_array($this->getFullPath('src/excludedDirectory/ExcludedFile.php'), $fileList));
         $this->assertFalse(in_array($this->getFullPath('src/excludedFromGit/ExcludedFromGit.php'), $fileList));
+        $this->assertFalse(in_array($this->getFullPath('src/excludedWithTrailingSlash/ExcludedFromGit.php'), $fileList));
     }
 
     public function getFullPath(string $dir): string

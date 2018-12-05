@@ -1,3 +1,4 @@
 src/excludedFromGit
 
 src/anotherDirectory
+/src/excludedWithTrailingSlash
