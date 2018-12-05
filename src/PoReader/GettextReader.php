@@ -33,27 +33,34 @@ class GettextReader
 
     /**
      * @param TranslationString[] $translationStrings
-     * @param string $fileName
      * @return string[] Added strings
      */
-    public function addNewTranslations(array $translationStrings, string $fileName)
+    public function addNewTranslations(array $translationStrings)
     {
         $addedStrings = [];
         foreach ($translationStrings as $translationString) {
             $id = Translation::generateId('', $translationString->originalString);
-            if (!isset($this->translations[$id])) {
-                $translation = new Translation('', $translationString->originalString);
-                $translation->addComment('Branch: '.$translationString->branchName);
-                foreach ($translationString->fileReferences as $reference) {
-                    $translation->addReference($reference);
-                }
-                $this->translations->offsetSet(null, $translation);
 
-                $addedStrings[] = $translationString->originalString;
+            if (isset($this->translations[$id])) {
+                if ($this->translations[$id]->isDisabled()) {
+                    $this->translations[$id]->setDisabled(false);
+                    $addedStrings[] = $translationString->originalString;
+                    continue;
+                } else {
+                    continue;
+                }
             }
+
+            $translation = new Translation('', $translationString->originalString);
+            $translation->addComment('Branch: '.$translationString->branchName);
+            foreach ($translationString->fileReferences as $reference) {
+                $translation->addReference($reference);
+            }
+            $this->translations->offsetSet(null, $translation);
+
+            $addedStrings[] = $translationString->originalString;
         }
 
-        $this->translations->toPoFile($fileName);
         return $addedStrings;
     }
 

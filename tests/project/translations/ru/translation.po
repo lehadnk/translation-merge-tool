@@ -1,0 +1,5 @@
+#~ msgid "Available tools:"
+#~ msgstr ""
+
+msgid "This string exists in .po file"
+msgstr ""

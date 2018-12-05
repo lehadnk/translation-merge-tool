@@ -241,7 +241,8 @@ class App extends CLI
                 $affectedTranslationFiles[] = $translationFile;
 
                 $reader = new GettextReader($translationFile->absolutePath);
-                $addedStrings = $reader->addNewTranslations($strings, $translationFile->absolutePath);
+                $addedStrings = $reader->addNewTranslations($strings);
+                $reader->save();
 
                 $addedStringsCount = count($addedStrings);
                 $this->newStringsTotal += $addedStringsCount;
