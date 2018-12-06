@@ -131,11 +131,6 @@ class App extends CLI
 
         $affectedTranslationFiles = $this->parseSources();
 
-        if ($this->newStringsTotal === 0 && !$this->options->getOpt('force')) {
-            $this->info('No changes found - aborting');
-            exit(0);
-        }
-
         $this->pushToVcs($affectedTranslationFiles);
         $this->pullWeblateComponent();
         $this->downloadTranslations($affectedTranslationFiles);
