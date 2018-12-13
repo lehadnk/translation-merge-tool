@@ -13,9 +13,9 @@ use PhpJsonMarshaller\Annotations\MarshallProperty;
 class Config
 {
     /**
-     * @MarshallProperty(name="minVersion", type="string")
+     * @MarshallProperty(name="configVersion", type="string")
      */
-    public $minVersion;
+    public $configVersion;
 
     /**
      * @MarshallProperty(name="vcs", type="string")

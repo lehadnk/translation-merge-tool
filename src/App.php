@@ -73,10 +73,11 @@ class App extends CLI
             $this->critical("Can't find translation config at ".$configFileName."! The application will terminate");
             exit(1);
         }
-        $this->config = ConfigFactory::read($configFileName);
 
-        if (!$this->doConfigVersionCheck()) {
-            $this->error("Error! Your i18n_mrg tool has version {$this->getVersion()} while minimum version requirement declared in .translate-config.json is {$this->config->minVersion}. Please consider running:".PHP_EOL."composer global update giftd/translation-merge-tool");
+        try {
+            $this->config = ConfigFactory::read($configFileName);
+        } catch (ConfigValidationException $e) {
+            $this->error($e->getMessage());
             return;
         }
 
@@ -333,14 +334,6 @@ class App extends CLI
     {
         $composerJson = ComposerJsonFactory::read();
         return $composerJson->version;
-    }
-
-    private function doConfigVersionCheck(): bool
-    {
-        $configVersion = str_replace('.', '', $this->config->minVersion);
-        $toolVersion = str_replace('.', '', $this->getVersion());
-
-        return (int) $configVersion <= (int) $toolVersion;
     }
 
     private function getCurrentBranch()
