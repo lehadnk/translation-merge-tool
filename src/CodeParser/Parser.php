@@ -82,8 +82,14 @@ class Parser
         $content = file_get_contents($path);
 
         $strings = [];
-        foreach(self::REGEXPS as $regexp) {
+        foreach(self::REGEXPS as $quoteType => $regexp) {
             preg_match_all($regexp, $content, $regexpResult);
+            foreach ($regexpResult as &$result) {
+                // We are removing all escaped quotes from the string
+                // Example #1: __("this is a \"quote\" ") => this is a "quote"
+                // Example #2: __('this is a \'quote\' ') => this is a 'quote'
+                $result = str_replace("\\$quoteType", $quoteType, $result);
+            }
             $strings = array_unique(array_merge($strings, $regexpResult[1]));
         }
 
