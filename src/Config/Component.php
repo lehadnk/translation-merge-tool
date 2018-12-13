@@ -18,14 +18,14 @@ class Component
     public $name;
 
     /**
-     * @MarshallProperty(name="includeDirectories", type="string[]")
+     * @MarshallProperty(name="includePaths", type="string[]")
      */
-    public $includeDirectories;
+    public $includePaths;
 
     /**
-     * @MarshallProperty(name="excludeDirectories", type="string[]")
+     * @MarshallProperty(name="excludePaths", type="string[]")
      */
-    public $excludeDirectories;
+    public $excludePaths;
 
     /**
      * @MarshallProperty(name="translationFileName", type="string")

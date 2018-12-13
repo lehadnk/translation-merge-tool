@@ -20,10 +20,11 @@ class FileListerTest extends AbstractTestProjectCase
         $fileLister = new FileLister();
         $fileList = $fileLister->getFileList($this->getTestComponent(), $this->getTestProjectDir());
 
-        $this->assertTrue(in_array($this->getFullPath('src/includedDirectory/IncludedFile.php'), $fileList));
-        $this->assertFalse(in_array($this->getFullPath('src/excludedDirectory/ExcludedFile.php'), $fileList));
-        $this->assertFalse(in_array($this->getFullPath('src/excludedFromGit/ExcludedFromGit.php'), $fileList));
-        $this->assertFalse(in_array($this->getFullPath('src/excludedWithTrailingSlash/ExcludedFromGit.php'), $fileList));
+        $this->assertContains($this->getFullPath('src/includedDirectory/IncludedFile.php'), $fileList);
+        $this->assertContains($this->getFullPath('public/SomeFileOutsideOfIncludeDir.php'), $fileList);
+        $this->assertNotContains($this->getFullPath('src/excludedDirectory/ExcludedFile.php'), $fileList);
+        $this->assertNotContains($this->getFullPath('src/excludedFromGit/ExcludedFromGit.php'), $fileList);
+        $this->assertNotContains($this->getFullPath('src/excludedWithTrailingSlash/ExcludedFromGit.php'), $fileList);
     }
 
     public function getFullPath(string $dir): string

@@ -27,18 +27,18 @@ class ParserTest extends AbstractTestProjectCase
     public function testGetStrings()
     {
         $strings = $this->parser->getStrings();
-        $this->assertTrue(array_key_exists('This translation is included in the project', $strings));
-        $this->assertFalse(array_key_exists('This translation is excluded from the project', $strings));
-        $this->assertFalse(array_key_exists('This string is excluded from git', $strings));
-        $this->assertTrue(array_key_exists('Smart tools module:', $strings));
-        $this->assertTrue(array_key_exists('Available tools:', $strings));
+        $this->assertArrayHasKey('This translation is included in the project', $strings);
+        $this->assertArrayNotHasKey('This translation is excluded from the project', $strings);
+        $this->assertArrayNotHasKey('This string is excluded from git', $strings);
+        $this->assertArrayHasKey('Smart tools module:', $strings);
+        $this->assertArrayHasKey('Available tools:', $strings);
     }
 
     public function testParseFile()
     {
         $strings = $this->parser->parseFile($this->getTestProjectDir().'/src/ExtremelyComplicatedFile.php');
-        $this->assertTrue(in_array('Test string', $strings));
-        $this->assertTrue(in_array('Another test string', $strings));
-        $this->assertFalse(in_array('Это строка с кириллицей', $strings));
+        $this->assertContains('Test string', $strings);
+        $this->assertContains('Another test string', $strings);
+        $this->assertNotContains('Это строка с кириллицей', $strings);
     }
 }

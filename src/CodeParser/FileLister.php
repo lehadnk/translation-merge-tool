@@ -29,13 +29,13 @@ class FileLister
         $this->gitIgnorePaths = $reader->getIgnoredPaths($workingDir);
 
         $result = [];
-        foreach($component->includeDirectories as $path) {
+        foreach($component->includePaths as $path) {
             $directoryList = $this->getFilesInPath($workingDir.'/'.$path);
 
             /**
              * @todo Do something with marshaller - it parses empty json array as null value
              */
-            $excludeDirectories = $component->excludeDirectories ?? [];
+            $excludeDirectories = $component->excludePaths ?? [];
 
             $filteredList = $this->filterFileList($directoryList, $excludeDirectories, $workingDir);
             $result = array_merge($result, $filteredList);
@@ -50,6 +50,8 @@ class FileLister
      */
     private function getFilesInPath(string $path): array
     {
+        if (is_file($path)) return [$path];
+
         $directory = new \RecursiveDirectoryIterator($path);
         $iterator = new \RecursiveIteratorIterator($directory);
         $fileList = new \RegexIterator($iterator, '/^.+\.(?:php|js|vue)$/i', \RegexIterator::GET_MATCH);

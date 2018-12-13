@@ -4,10 +4,11 @@
   "components": [
     {
       "name": "default",
-      "includeDirectories": [
-        "src/"
+      "includePaths": [
+        "src/",
+        "public/SomeFileOutsideOfIncludeDir.php"
       ],
-      "excludeDirectories": [
+      "excludePaths": [
         "src/excludedDirectory"
       ],
       "translationFileName": "translations/{localeName}/translation.po"

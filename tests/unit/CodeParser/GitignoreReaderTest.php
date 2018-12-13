@@ -19,7 +19,7 @@ class GitignoreReaderTest extends AbstractTestProjectCase
         $reader = new GitignoreReader();
         $paths = $reader->getIgnoredPaths($this->getTestProjectDir());
 
-        $this->assertTrue(in_array('src/excludedFromGit', $paths));
-        $this->assertFalse(in_array('', $paths));
+        $this->assertContains('src/excludedFromGit', $paths);
+        $this->assertNotContains('', $paths);
     }
 }

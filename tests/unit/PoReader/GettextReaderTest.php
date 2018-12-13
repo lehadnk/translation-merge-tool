@@ -27,8 +27,8 @@ class GettextReaderTest extends AbstractTestProjectCase
         ];
         $newStrings = $reader->addNewTranslations($addedStrings);
 
-        $this->assertFalse(in_array('This string exists in .po file', $newStrings));
-        $this->assertTrue(in_array('Available tools:', $newStrings));
-        $this->assertTrue(in_array('This string is not existing in .po file', $newStrings));
+        $this->assertNotContains('This string exists in .po file', $newStrings);
+        $this->assertContains('Available tools:', $newStrings);
+        $this->assertContains('This string is not existing in .po file', $newStrings);
     }
 }
