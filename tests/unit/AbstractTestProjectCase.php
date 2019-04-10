@@ -11,7 +11,6 @@ namespace UnitTests;
 use TranslationMergeTool\Config\Component;
 use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
-use TranslationMergeTool\CodeParser\Parser;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractTestProjectCase extends TestCase
