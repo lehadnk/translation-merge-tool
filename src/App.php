@@ -8,6 +8,8 @@
 
 namespace TranslationMergeTool;
 
+use Gettext\Translation;
+use Gettext\Translations;
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
 use TranslationMergeTool\Config\ComposerJson\ComposerJsonFactory;
@@ -59,6 +61,7 @@ class App extends CLI
         $options->registerOption('print-untranslated', 'print all untranslated strings from current branch');
         $options->registerOption('prune', 'mark all non-existing strings in project as disabled');
         $options->registerOption('force', 'pushes sources to repository and pulls component, even if no changes are found', 'f');
+        $options->registerArgument('add-lang', 'adds new language to the existing project', false);
     }
 
     protected function main(Options $options)
@@ -124,6 +127,11 @@ class App extends CLI
             return;
         }
 
+        if ($this->options->getArgs()) {
+            $this->addLanguage($this->options->getOpt('add-lang'));
+            return;
+        }
+
         $this->commitAndPushWeblateComponent();
 
         // We need to get latest translations from Weblate before we parse the files, because we don't want
@@ -152,7 +160,13 @@ class App extends CLI
                 $translationFile->absolutePath = $this->workingDir.'/'.$translationFile->relativePath;
                 $translationFile->weblateCode = $locale->weblateCode;
                 $translationFile->component = $component;
+                $translationFile->isNew = !file_exists($translationFile->absolutePath);
                 $allTranslationFiles[] = $translationFile;
+
+                if ($translationFile->isNew) {
+                    $this->info("No translation file found for {$locale->localeName}. Creating a new one");
+                    $this->addLanguage($locale->localeName, $translationFile);
+                }
             }
         }
 
@@ -169,7 +183,7 @@ class App extends CLI
         $uniqueUntranslatedStrings = [];
 
         foreach ($translations as $translation) {
-            $reader = new GettextReader($translation->absolutePath);
+            $reader = new GettextReader(Translations::fromPoFile($translation->absolutePath), $translation->absolutePath);
             $untranslated = $reader->getUntranslatedStringsAddedInBranch($currentBranchName);
 
             $uniqueUntranslatedStrings = array_merge($uniqueUntranslatedStrings, $untranslated);
@@ -236,7 +250,7 @@ class App extends CLI
                 $translationFile->weblateCode = $locale->weblateCode;
                 $affectedTranslationFiles[] = $translationFile;
 
-                $reader = new GettextReader($translationFile->absolutePath);
+                $reader = new GettextReader(Translations::fromPoFile($translationFile->absolutePath), $translationFile->absolutePath);
                 $addedStrings = $reader->addNewTranslations($strings);
                 $reader->save();
 
@@ -269,7 +283,7 @@ class App extends CLI
     {
         $this->info("Pushing updated files to {$this->config->vcs}...");
         foreach ($affectedTranslationFiles as $translationFile) {
-            $this->vcsAPI->addFile($translationFile->absolutePath, $translationFile->relativePath);
+            $this->vcsAPI->addFile($translationFile);
         }
 
         $result = $this->vcsAPI->commit();
@@ -370,7 +384,7 @@ class App extends CLI
                 $strings[] = $string->originalString;
             }
 
-            $reader = new GettextReader($translationFile->absolutePath);
+            $reader = new GettextReader(Translations::fromPoFile($translationFile->absolutePath), $translationFile->absolutePath);
             $disabledTranslations = [];
             foreach ($reader->translations as $translation) {
                 $original = $translation->getOriginal();
@@ -392,5 +406,29 @@ class App extends CLI
         $this->pullWeblateComponent();
 
         $this->success("Strings which are not used in the project are now marked as disabled. There are ".count($totalDisabledStrings)." of them in the project.");
+    }
+
+    private function addLanguage(string $language, TranslationFile $translationFile)
+    {
+        $currentBranchName = $this->getCurrentBranchName();
+
+        foreach ($this->config->components as $component) {
+            $this->info("Parsing component {$component->name}...");
+
+            $parser = new Parser($component, $this->workingDir, $currentBranchName);
+            $strings = $parser->getStrings();
+
+            $fileName = $component->getTranslationFileName($language);
+
+            $reader = new GettextReader(new Translations(), $fileName);
+            $reader->addNewTranslations($strings);
+            $reader->save();
+        }
+
+        $this->pushToVcs([$translationFile]);
+        $this->commitAndPushWeblateComponent();
+        $translationFile->isNew = false;
+        $this->info("New language was added to the list. Now go to Weblate frontend, navigate to Manage > Repository maintenance, and click pull button, then re-run this tool after new language will be added.");
+        exit(1);
     }
 }

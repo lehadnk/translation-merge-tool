@@ -25,9 +25,9 @@ class GettextReader
      */
     private $fileName;
 
-    public function __construct(string $fileName)
+    public function __construct(Translations $translations, string $fileName)
     {
-        $this->translations = Translations::fromPoFile($fileName);
+        $this->translations = $translations;
         $this->fileName = $fileName;
     }
 

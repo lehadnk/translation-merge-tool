@@ -29,6 +29,11 @@ class TranslationFile
     public $weblateCode;
 
     /**
+     * @var bool
+     */
+    public $isNew;
+
+    /**
      * @var Component
      */
     public $component;

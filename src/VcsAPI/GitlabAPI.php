@@ -23,11 +23,11 @@ class GitlabAPI extends VcsApiAbstract implements VcsApiInterface
         $slug = urlencode($this->config->vcsRepository);
 
         $actions = [];
-        foreach ($this->fileList as $fileName => $remoteFileName) {
+        foreach ($this->fileList as $translationFile) {
             $actions[] = [
-                'action' => 'update',
-                'file_path' => $remoteFileName,
-                'content' => file_get_contents($fileName),
+                'action' => $translationFile->isNew ? 'create' : 'update',
+                'file_path' => $translationFile->relativePath,
+                'content' => file_get_contents($translationFile->absolutePath),
             ];
         }
 

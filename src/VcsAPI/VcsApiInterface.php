@@ -10,9 +10,10 @@ namespace TranslationMergeTool\VcsAPI;
 
 
 use Psr\Http\Message\ResponseInterface;
+use TranslationMergeTool\DTO\TranslationFile;
 
 interface VcsApiInterface
 {
-    public function addFile(string $fileName, string $remoteFileName);
+    public function addFile(TranslationFile $translationFile);
     public function commit(): ResponseInterface;
 }

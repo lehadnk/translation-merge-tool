@@ -33,8 +33,6 @@ class PoPostProcessor
      */
     private function removeMalformedTranslations(Translations $translations)
     {
-        $removedIndexes = [];
-        //$newTranslations = clone $translations;
         $newTranslations = new Translations();
 
         /**

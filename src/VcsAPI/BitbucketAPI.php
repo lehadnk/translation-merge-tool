@@ -20,11 +20,6 @@ class BitbucketAPI extends VcsApiAbstract implements VcsApiInterface
 {
     protected $baseUri = 'https://api.bitbucket.org/2.0/';
 
-    public function addFile(string $fileName, string $remoteFileName)
-    {
-        $this->fileList[$fileName] = $remoteFileName;
-    }
-
     /**
      * @return ResponseInterface
      *
@@ -38,7 +33,7 @@ class BitbucketAPI extends VcsApiAbstract implements VcsApiInterface
     public function commit(): ResponseInterface
     {
         $response = null;
-        foreach ($this->fileList as $fileName => $remoteFileName) {
+        foreach ($this->fileList as $translationFile) {
             $response = $this->httpClient->post(
                 "repositories/{$this->config->vcsRepository}/src",
                 [
@@ -48,8 +43,8 @@ class BitbucketAPI extends VcsApiAbstract implements VcsApiInterface
                             'contents' => $this->config->translationBranchName,
                         ],
                         [
-                            'name' => $remoteFileName,
-                            'contents' => file_get_contents($fileName),
+                            'name' => $translationFile->relativePath,
+                            'contents' => file_get_contents($translationFile->absolutePath),
                         ]
                     ]
                 ]

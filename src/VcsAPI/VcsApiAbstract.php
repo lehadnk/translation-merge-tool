@@ -11,6 +11,7 @@ namespace TranslationMergeTool\VcsAPI;
 
 use GuzzleHttp\Client;
 use TranslationMergeTool\Config\Config;
+use TranslationMergeTool\DTO\TranslationFile;
 use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
@@ -28,7 +29,7 @@ abstract class VcsApiAbstract
     protected $config;
 
     /**
-     * @var string[]
+     * @var TranslationFile[]
      */
     protected $fileList = [];
 
@@ -54,9 +55,9 @@ abstract class VcsApiAbstract
 
     abstract function createHttpClient(): Client;
 
-    public function addFile(string $fileName, string $remoteFileName)
+    public function addFile(TranslationFile $translationFile)
     {
-        $this->fileList[$fileName] = $remoteFileName;
+        $this->fileList[] = $translationFile;
     }
 
     /**
