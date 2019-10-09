@@ -8,8 +8,6 @@
 
 namespace CodeParser;
 
-use PHPUnit\Framework\TestCase;
-use SebastianBergmann\CodeCoverage\Node\File;
 use TranslationMergeTool\CodeParser\FileLister;
 use UnitTests\AbstractTestProjectCase;
 

@@ -32,6 +32,24 @@ class GettextReader
     }
 
     /**
+     * @param string $filename
+     * @return GettextReader
+     */
+    public static function readFile(string $filename)
+    {
+        return new self(Translations::fromPoFile($filename), $filename);
+    }
+
+    /**
+     * @param string $filename
+     * @return GettextReader
+     */
+    public static function newFile(string $filename)
+    {
+        return new self (new Translations(), $filename);
+    }
+
+    /**
      * @param TranslationString[] $translationStrings
      * @return string[] Added strings
      */

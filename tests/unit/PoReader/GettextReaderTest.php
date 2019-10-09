@@ -10,7 +10,6 @@ namespace UnitTests\PoReader;
 
 use TranslationMergeTool\DTO\TranslationString;
 use TranslationMergeTool\PoReader\GettextReader;
-use PHPUnit\Framework\TestCase;
 use UnitTests\AbstractTestProjectCase;
 
 class GettextReaderTest extends AbstractTestProjectCase
@@ -18,7 +17,7 @@ class GettextReaderTest extends AbstractTestProjectCase
 
     public function testAddNewTranslations()
     {
-        $reader = new GettextReader($this->getTestProjectDir().'/translations/ru/translation.po');
+        $reader = GettextReader::readFile($this->getTestProjectDir().'/translations/ru/translation.po');
 
         $addedStrings = [
             new TranslationString('This string exists in .po file', ['testfile'], 'test'),

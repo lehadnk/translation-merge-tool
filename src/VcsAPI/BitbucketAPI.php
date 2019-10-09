@@ -11,10 +11,7 @@ namespace TranslationMergeTool\VcsAPI;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
-use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
-use TranslationMergeTool\VcsAPI\VcsApiAbstract;
-use TranslationMergeTool\VcsAPI\VcsApiInterface;
 
 class BitbucketAPI extends VcsApiAbstract implements VcsApiInterface
 {

@@ -8,8 +8,6 @@
 
 namespace UnitTests\CodeParser;
 
-use Gettext\Translations;
-use TranslationMergeTool\PoReader\GettextReader;
 use TranslationMergeTool\PoReader\PoPostProcessor;
 use UnitTests\AbstractTestProjectCase;
 

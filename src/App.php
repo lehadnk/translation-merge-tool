@@ -8,8 +8,6 @@
 
 namespace TranslationMergeTool;
 
-use Gettext\Translation;
-use Gettext\Translations;
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
 use TranslationMergeTool\Config\ComposerJson\ComposerJsonFactory;
@@ -61,7 +59,6 @@ class App extends CLI
         $options->registerOption('print-untranslated', 'print all untranslated strings from current branch');
         $options->registerOption('prune', 'mark all non-existing strings in project as disabled');
         $options->registerOption('force', 'pushes sources to repository and pulls component, even if no changes are found', 'f');
-        $options->registerArgument('add-lang', 'adds new language to the existing project', false);
     }
 
     protected function main(Options $options)
@@ -183,7 +180,7 @@ class App extends CLI
         $uniqueUntranslatedStrings = [];
 
         foreach ($translations as $translation) {
-            $reader = new GettextReader(Translations::fromPoFile($translation->absolutePath), $translation->absolutePath);
+            $reader = GettextReader::readFile($translation->absolutePath);
             $untranslated = $reader->getUntranslatedStringsAddedInBranch($currentBranchName);
 
             $uniqueUntranslatedStrings = array_merge($uniqueUntranslatedStrings, $untranslated);
@@ -250,7 +247,7 @@ class App extends CLI
                 $translationFile->weblateCode = $locale->weblateCode;
                 $affectedTranslationFiles[] = $translationFile;
 
-                $reader = new GettextReader(Translations::fromPoFile($translationFile->absolutePath), $translationFile->absolutePath);
+                $reader = GettextReader::readFile($translationFile->absolutePath);
                 $addedStrings = $reader->addNewTranslations($strings);
                 $reader->save();
 
@@ -384,7 +381,7 @@ class App extends CLI
                 $strings[] = $string->originalString;
             }
 
-            $reader = new GettextReader(Translations::fromPoFile($translationFile->absolutePath), $translationFile->absolutePath);
+            $reader = GettextReader::readFile($translationFile->absolutePath);
             $disabledTranslations = [];
             foreach ($reader->translations as $translation) {
                 $original = $translation->getOriginal();
@@ -420,7 +417,7 @@ class App extends CLI
 
             $fileName = $component->getTranslationFileName($language);
 
-            $reader = new GettextReader(new Translations(), $fileName);
+            $reader = GettextReader::newFile($fileName);
             $reader->addNewTranslations($strings);
             $reader->save();
         }
