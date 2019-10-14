@@ -16,8 +16,15 @@ use TranslationMergeTool\DTO\TranslationString;
 class Parser
 {
     const REGEXPS = [
-        '"' => '/[^a-zA-Z0-9]_?_(?:link)?\(\s*"(([^"\\\\]*(\\\\.[^"\\\\]*)*))"\s*(,|\))/m',
-        "'" => '/[^a-zA-Z0-9]_?_(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
+        '"' => [
+            '/[^a-zA-Z0-9]t(?:link)?\(\s*"(([^"\\\\]*(\\\\.[^"\\\\]*)*))"\s*(,|\))/m',
+            '/[^a-zA-Z0-9]_?_(?:link)?\(\s*"(([^"\\\\]*(\\\\.[^"\\\\]*)*))"\s*(,|\))/m',
+        ],
+        "'" => [
+            '/[^a-zA-Z0-9]t(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
+            '/[^a-zA-Z0-9]_?_(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
+
+        ],
     ];
 
 
@@ -82,15 +89,17 @@ class Parser
         $content = file_get_contents($path);
 
         $strings = [];
-        foreach(self::REGEXPS as $quoteType => $regexp) {
-            preg_match_all($regexp, $content, $regexpResult);
-            foreach ($regexpResult as &$result) {
-                // We are removing all escaped quotes from the string
-                // Example #1: __("this is a \"quote\" ") => this is a "quote"
-                // Example #2: __('this is a \'quote\' ') => this is a 'quote'
-                $result = str_replace("\\$quoteType", $quoteType, $result);
+        foreach(self::REGEXPS as $quoteType => $regexps) {
+            foreach ($regexps as $regexp) {
+                preg_match_all($regexp, $content, $regexpResult);
+                foreach ($regexpResult as &$result) {
+                    // We are removing all escaped quotes from the string
+                    // Example #1: __("this is a \"quote\" ") => this is a "quote"
+                    // Example #2: __('this is a \'quote\' ') => this is a 'quote'
+                    $result = str_replace("\\$quoteType", $quoteType, $result);
+                }
+                $strings = array_unique(array_merge($strings, $regexpResult[1]));
             }
-            $strings = array_unique(array_merge($strings, $regexpResult[1]));
         }
 
         $result = [];

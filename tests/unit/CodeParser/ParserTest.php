@@ -32,6 +32,7 @@ class ParserTest extends AbstractTestProjectCase
         $this->assertArrayNotHasKey('This string is excluded from git', $strings);
         $this->assertArrayHasKey('Smart tools module:', $strings);
         $this->assertArrayHasKey('Available tools:', $strings);
+        $this->assertArrayHasKey('my translated text', $strings);
     }
 
     public function testParseFile()
