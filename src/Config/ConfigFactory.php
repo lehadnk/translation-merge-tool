@@ -42,6 +42,7 @@ class ConfigFactory
         $config->vcsAuthToken = $config->vcsAuthToken ?? getenv('I18N_MRG_VCS_AUTH_TOKEN');
         $config->vcsUsername = $config->vcsUsername ?? getenv('I18N_MRG_VCS_USERNAME');
         $config->vcsPassword = $config->vcsPassword ?? getenv('I18N_MRG_VCS_PASSWORD');
+        $config->weblateAuthToken = $config->weblateAuthToken ?? getenv('I18N_WEBLATE_AUTH_TOKEN');
 
         return $config;
     }
