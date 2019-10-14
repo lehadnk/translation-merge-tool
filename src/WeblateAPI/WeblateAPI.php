@@ -6,13 +6,13 @@
  * Time: 2:32 PM
  */
 
-namespace TranslationMergeTool;
+namespace TranslationMergeTool\WeblateAPI;
 
 
 use GuzzleHttp\Client;
 use TranslationMergeTool\Config\Config;
 
-class WeblateAPI
+class WeblateAPI implements IWeblateAPI
 {
     /**
      * @var string
@@ -117,8 +117,10 @@ class WeblateAPI
      * -H "Authorization: Token token" \
      * -o download.po \
      * http://159.65.200.211/api/translations/crm/translate/tr/file/
+     * @param string $localeName
+     * @return string
      */
-    public function downloadTranslation(string $localeName)
+    public function downloadTranslation(string $localeName): string
     {
         $result = $this->httpClient->get(
             "translations/{$this->projectSlug}/{$this->componentSlug}/$localeName/file",

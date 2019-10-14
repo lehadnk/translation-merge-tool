@@ -73,4 +73,9 @@ class Config
      * @var Component[]
      */
     public $components;
+
+    /**
+     * @MarshallProperty(name="outputJson", type="bool")
+     */
+    public $outputJson;
 }

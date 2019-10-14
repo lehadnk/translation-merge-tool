@@ -32,6 +32,9 @@ class VcsApiFactory
         if ($config->vcs === 'gitlab') {
             return new GitlabAPI($config);
         }
+        if ($config->vcs === 'github') {
+            return new GithubAPI($config);
+        }
         throw new Exception("No API class found for {$config->vcs}");
     }
 }

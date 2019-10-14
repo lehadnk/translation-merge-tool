@@ -22,6 +22,8 @@ use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
 use TranslationMergeTool\DTO\TranslationFile;
 use TranslationMergeTool\PoReader\GettextReader;
+use TranslationMergeTool\WeblateAPI\MockWeblateAPI;
+use TranslationMergeTool\WeblateAPI\WeblateAPI;
 
 class App extends CLI
 {
@@ -59,6 +61,7 @@ class App extends CLI
         $options->registerOption('print-untranslated', 'print all untranslated strings from current branch');
         $options->registerOption('prune', 'mark all non-existing strings in project as disabled');
         $options->registerOption('force', 'pushes sources to repository and pulls component, even if no changes are found', 'f');
+        $options->registerOption('no-weblate', 'skips all weblate-based operations');
     }
 
     protected function main(Options $options)
@@ -97,6 +100,9 @@ class App extends CLI
         }
 
         $this->weblateAPI = new WeblateAPI($this->config);
+        if ($this->options->getOpt('no-weblate')) {
+            $this->weblateAPI = new MockWeblateAPI();
+        }
         $this->workingDir = getcwd();
 
         $this->updateTranslations();
@@ -279,13 +285,19 @@ class App extends CLI
     private function pushToVcs(array $affectedTranslationFiles)
     {
         $this->info("Pushing updated files to {$this->config->vcs}...");
+
+        if (count($affectedTranslationFiles) === 0) {
+            $this->info("No translation files are updated, skipping pushing to VCS");
+            return;
+        }
+
         foreach ($affectedTranslationFiles as $translationFile) {
             $this->vcsAPI->addFile($translationFile);
         }
 
         $result = $this->vcsAPI->commit();
 
-        if ($result->getStatusCode() !== 201) {
+        if ($result->getStatusCode()[0] === 2) {
             $this->error("Unable to push {$translationFile->relativePath} to the repository!");
             $this->debug($result->getStatusCode());
             $this->debug($result->getReasonPhrase());
@@ -336,6 +348,9 @@ class App extends CLI
             $moPath = $translationFile->getAbsolutePathToMo();
 
             exec("msgfmt -o $moPath {$translationFile->absolutePath}");
+            if ($this->config->outputJson) {
+                exec("i18next-conv -l {$translationFile->weblateCode} -s {$translationFile->absolutePath} -t {$translationFile->absolutePath}.json");
+            }
         }
 
         $this->info("Total updated translation files: $totalUpdated / $total");

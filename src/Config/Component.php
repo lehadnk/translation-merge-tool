@@ -9,6 +9,7 @@
 namespace TranslationMergeTool\Config;
 use PhpJsonMarshaller\Annotations\MarshallProperty;
 use TranslationMergeTool\DTO\Locale;
+use TranslationMergeTool\Exceptions\ConfigValidation\DirectoryNotFoundException;
 
 class Component
 {
@@ -46,6 +47,10 @@ class Component
         $path = $workingDir.'/'.explode('{localeName}', $this->translationFileName)[0];
 
         $locales = [];
+        if (!is_dir($path)) {
+            throw new DirectoryNotFoundException("No directory named $path is found. Make sure that it exists in the project.");
+        }
+
         $dir = new \DirectoryIterator($path);
         foreach ($dir as $fileInfo) {
             if ($fileInfo->isDir() && !$fileInfo->isDot()) {
