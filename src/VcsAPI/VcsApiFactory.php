@@ -19,21 +19,24 @@ class VcsApiFactory
 {
     /**
      * @param Config $config
-     * @return VcsApiInterface
+     * @return IVcsApi
      * @throws ConfigValidationException
      * @throws NoAuthTokenException
      * @throws NoAuthCredentialsException
      */
-    public static function make(Config $config): VcsApiInterface
+    public static function make(Config $config): IVcsApi
     {
         if ($config->vcs === 'bitbucket') {
-            return new BitbucketAPI($config);
+            return new BitbucketAPII($config);
         }
         if ($config->vcs === 'gitlab') {
-            return new GitlabAPI($config);
+            return new GitlabAPII($config);
         }
         if ($config->vcs === 'github') {
-            return new GithubAPI($config);
+            return new GithubAPII($config);
+        }
+        if ($config->vcs === 'mock') {
+            return new MockIVcsAPI();
         }
         throw new Exception("No API class found for {$config->vcs}");
     }

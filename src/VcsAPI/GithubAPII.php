@@ -15,7 +15,7 @@ use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 
-class GithubAPI extends VcsApiAbstract implements VcsApiInterface
+class GithubAPII extends VcsApiAbstract implements IVcsApi
 {
     const BASE_URI = 'https://api.github.com/';
 

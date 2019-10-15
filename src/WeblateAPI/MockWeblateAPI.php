@@ -4,17 +4,19 @@
 namespace TranslationMergeTool\WeblateAPI;
 
 
+use TranslationMergeTool\Console;
+
 class MockWeblateAPI implements IWeblateAPI
 {
 
     public function commitComponent()
     {
-        echo "Commiting weblate component...".PHP_EOL;
+        Console::debug("Commiting weblate component...");
     }
 
     public function pushComponent()
     {
-        echo "Pushing weblate component".PHP_EOL;
+        Console::debug("Pushing weblate component");
     }
 
     /**
@@ -27,7 +29,7 @@ class MockWeblateAPI implements IWeblateAPI
      */
     public function pullComponent()
     {
-        echo "Pulling weblate component".PHP_EOL;
+        Console::debug("Pulling weblate component");
     }
 
     /**
@@ -42,7 +44,7 @@ class MockWeblateAPI implements IWeblateAPI
      */
     public function downloadTranslation(string $localeName)
     {
-        echo "Downloading translation file $localeName".PHP_EOL;
+        Console::debug("Downloading translation file $localeName");
         return file_get_contents(__DIR__.'/../../tests/project/translations/ru/translation.po');
     }
 }

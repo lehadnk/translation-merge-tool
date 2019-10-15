@@ -13,7 +13,7 @@ use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 
-class BitbucketAPI extends VcsApiAbstract implements VcsApiInterface
+class BitbucketAPII extends VcsApiAbstract implements IVcsApi
 {
     protected $baseUri = 'https://api.bitbucket.org/2.0/';
 

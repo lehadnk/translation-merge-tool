@@ -16,7 +16,7 @@ use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 use TranslationMergeTool\PoReader\PoPostProcessor;
 use TranslationMergeTool\VcsAPI\VcsApiFactory;
-use TranslationMergeTool\VcsAPI\VcsApiInterface;
+use TranslationMergeTool\VcsAPI\IVcsApi;
 use TranslationMergeTool\CodeParser\Parser;
 use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
@@ -38,7 +38,7 @@ class App extends CLI
     private $config;
 
     /**
-     * @var VcsApiInterface
+     * @var IVcsApi
      */
     private $vcsAPI;
 
@@ -62,6 +62,8 @@ class App extends CLI
         $options->registerOption('prune', 'mark all non-existing strings in project as disabled');
         $options->registerOption('force', 'pushes sources to repository and pulls component, even if no changes are found', 'f');
         $options->registerOption('no-weblate', 'skips all weblate-based operations');
+
+        Console::setAppInstance($this);
     }
 
     protected function main(Options $options)
