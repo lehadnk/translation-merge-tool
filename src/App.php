@@ -226,6 +226,7 @@ class App extends CLI
 
     /**
      * @return TranslationFile[]
+     * @throws Exceptions\ConfigValidation\DirectoryNotFoundException
      */
     public function parseSources()
     {

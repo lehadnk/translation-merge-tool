@@ -5,17 +5,12 @@ namespace TranslationMergeTool\VcsAPI;
 
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
-use TranslationMergeTool\Config\Config;
-use TranslationMergeTool\DTO\TranslationFile;
 use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
-use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 
-class GithubAPII extends VcsApiAbstract implements IVcsApi
+class GithubAPI extends VcsApiAbstract implements IVcsApi
 {
     const BASE_URI = 'https://api.github.com/';
 

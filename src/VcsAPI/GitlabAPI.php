@@ -13,7 +13,7 @@ use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 
-class GitlabAPII extends VcsApiAbstract implements IVcsApi
+class GitlabAPI extends VcsApiAbstract implements IVcsApi
 {
     protected $baseUri = 'https://gitlab.com/api/v4/';
 

@@ -30,10 +30,10 @@ class VcsApiFactory
             return new BitbucketAPII($config);
         }
         if ($config->vcs === 'gitlab') {
-            return new GitlabAPII($config);
+            return new GitlabAPI($config);
         }
         if ($config->vcs === 'github') {
-            return new GithubAPII($config);
+            return new GithubAPI($config);
         }
         if ($config->vcs === 'mock') {
             return new MockIVcsAPI();
