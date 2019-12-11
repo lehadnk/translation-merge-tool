@@ -9,7 +9,7 @@ The software you need to install translation merge tool:
 You require php>=7.0 in order to run the software.
 Also, you require to have PHP packet manager (composer) which you mat get [here](https://getcomposer.org/download/).
 
-First, add this repository to your ~/.composer/composer.son file (create it if you don't have one):
+First, add this repository to your ~/.composer/composer.json file (create it if you don't have one):
 ```json
 {
   "repositories": [
