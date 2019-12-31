@@ -25,6 +25,7 @@ class Locale
     private function toWeblateCode(string $localeName): string
     {
         if ($localeName === 'zh_CN') return 'zh_Hans';
+        if ($localeName === 'en_US') return 'en_US';
         return explode('_', $localeName)[0];
     }
 }

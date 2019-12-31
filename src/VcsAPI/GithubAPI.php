@@ -44,12 +44,6 @@ class GithubAPI extends VcsApiAbstract implements IVcsApi
                 RequestOptions::HEADERS => [
                     'Authorization' => 'token '.$this->config->vcsAuthToken,
                 ],
-//                RequestOptions::JSON => [
-//                    'message' => 'The commit was made by using i18n_mrg tool',
-//                    'content' => $contents,
-//                    'branch' => $this->config->translationBranchName,
-//                    'sha' => sha1($contents),
-//                ],
             ]
         );
 
@@ -66,29 +60,20 @@ class GithubAPI extends VcsApiAbstract implements IVcsApi
             $contents = file_get_contents($translationFile->absolutePath);
             $sha = $this->getFileSha($translationFile->relativePath);
 
-//            try {
-                $response = $this->httpClient->put(
-                    "repos/{$this->config->vcsRepository}/contents/".$translationFile->relativePath,
-                    [
-                        RequestOptions::HEADERS => [
-                            'Authorization' => 'token '.$this->config->vcsAuthToken,
-                        ],
-                        RequestOptions::JSON => [
-                            'message' => 'The commit was made by using i18n_mrg tool',
-                            'content' => base64_encode($contents),
-                            'branch' => $this->config->translationBranchName,
-                            'sha' => $sha,
-                        ],
-                    ]
-                );
-//            } catch (ClientException $exception) {
-//                if ($exception->getCode() === 409) {
-                    // @todo here comes the most fucked up thing - it may both mean failure to upload, and the fact that file didn't change since last run
-//                    return new Response(200);
-//                } else {
-//                    throw $exception;
-//                }
-//            }
+            $response = $this->httpClient->put(
+                "repos/{$this->config->vcsRepository}/contents/".$translationFile->relativePath,
+                [
+                    RequestOptions::HEADERS => [
+                        'Authorization' => 'token '.$this->config->vcsAuthToken,
+                    ],
+                    RequestOptions::JSON => [
+                        'message' => 'The commit was made by using i18n_mrg tool',
+                        'content' => base64_encode($contents),
+                        'branch' => $this->config->translationBranchName,
+                        'sha' => $sha,
+                    ],
+                ]
+            );
         }
 
         return $response;

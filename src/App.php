@@ -132,11 +132,6 @@ class App extends CLI
             return;
         }
 
-        if ($this->options->getArgs()) {
-            $this->addLanguage($this->options->getOpt('add-lang'));
-            return;
-        }
-
         $this->commitAndPushWeblateComponent();
 
         // We need to get latest translations from Weblate before we parse the files, because we don't want
