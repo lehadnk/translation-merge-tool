@@ -13,7 +13,7 @@ use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 
-class BitbucketAPII extends VcsApiAbstract implements IVcsApi
+class BitbucketAPI extends VcsApiAbstract implements IVcsApi
 {
     protected $baseUri = 'https://api.bitbucket.org/2.0/';
 
@@ -59,7 +59,7 @@ class BitbucketAPII extends VcsApiAbstract implements IVcsApi
         ]);
     }
 
-    protected function validateConfig()
+    protected function validateConfig(): void
     {
         if (!$this->config->vcsUsername || !$this->config->vcsPassword) {
             throw new NoAuthCredentialsException();

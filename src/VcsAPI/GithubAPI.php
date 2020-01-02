@@ -25,9 +25,9 @@ class GithubAPI extends VcsApiAbstract implements IVcsApi
      * @throws NoAuthTokenException
      * @throws ConfigValidationException
      */
-    protected function validateConfig()
+    protected function validateConfig(): void
     {
-        if ($this->config->vcsAuthToken === null) {
+        if ($this->config->githubAuthToken === null) {
             throw new NoAuthTokenException();
         }
     }
@@ -42,7 +42,7 @@ class GithubAPI extends VcsApiAbstract implements IVcsApi
             "repos/{$this->config->vcsRepository}/contents/".$relativePath.'?ref='.$this->config->translationBranchName,
             [
                 RequestOptions::HEADERS => [
-                    'Authorization' => 'token '.$this->config->vcsAuthToken,
+                    'Authorization' => 'token '.$this->config->githubAuthToken,
                 ],
             ]
         );
@@ -64,7 +64,7 @@ class GithubAPI extends VcsApiAbstract implements IVcsApi
                 "repos/{$this->config->vcsRepository}/contents/".$translationFile->relativePath,
                 [
                     RequestOptions::HEADERS => [
-                        'Authorization' => 'token '.$this->config->vcsAuthToken,
+                        'Authorization' => 'token '.$this->config->githubAuthToken,
                     ],
                     RequestOptions::JSON => [
                         'message' => 'The commit was made by using i18n_mrg tool',

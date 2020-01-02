@@ -27,7 +27,7 @@ class VcsApiFactory
     public static function make(Config $config): IVcsApi
     {
         if ($config->vcs === 'bitbucket') {
-            return new BitbucketAPII($config);
+            return new BitbucketAPI($config);
         }
         if ($config->vcs === 'gitlab') {
             return new GitlabAPI($config);

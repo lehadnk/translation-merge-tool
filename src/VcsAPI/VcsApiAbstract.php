@@ -65,5 +65,5 @@ abstract class VcsApiAbstract
      * @throws NoAuthCredentialsException
      * @throws ConfigValidationException
      */
-    abstract protected function validateConfig();
+    abstract protected function validateConfig(): void;
 }

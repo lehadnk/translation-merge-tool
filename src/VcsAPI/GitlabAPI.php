@@ -15,9 +15,24 @@ use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 
 class GitlabAPI extends VcsApiAbstract implements IVcsApi
 {
+    /**
+     * @var string
+     */
     protected $baseUri = 'https://gitlab.com/api/v4/';
 
-    //https://gitlab.com/api/v4/projects/giftd%2Fcrm/repository/commits
+    protected function validateConfig(): void
+    {
+        if ($this->config->gitlabAuthToken === null) {
+            throw new NoAuthTokenException();
+        }
+    }
+
+    //
+
+    /**
+     * Request URI example: https://gitlab.com/api/v4/projects/giftd%2Fcrm/repository/commits
+     * @return ResponseInterface
+     */
     public function commit():ResponseInterface
     {
         $slug = urlencode($this->config->vcsRepository);
@@ -35,7 +50,7 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
             "projects/$slug/repository/commits",
             [
                 RequestOptions::HEADERS => [
-                    'PRIVATE-TOKEN' => $this->config->vcsAuthToken,
+                    'PRIVATE-TOKEN' => $this->config->gitlabAuthToken,
                 ],
                 RequestOptions::JSON => [
                     'branch' => $this->config->translationBranchName,
@@ -48,17 +63,13 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
         return $response;
     }
 
+    /**
+     * @return Client
+     */
     function createHttpClient(): Client
     {
         return new Client([
             'base_uri' => $this->baseUri,
         ]);
-    }
-
-    protected function validateConfig()
-    {
-        if ($this->config->vcsAuthToken === null) {
-            throw new NoAuthTokenException();
-        }
     }
 }

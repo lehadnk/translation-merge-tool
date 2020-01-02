@@ -39,7 +39,8 @@ class ConfigFactory
             throw new ConfigVersionMismatch("The tool accepts only config versions ".implode(',', self::ACCEPTS_CONFIG_VERSIONS)." while config version is {$config->configVersion}. You must either update tool or config");
         }
 
-        $config->vcsAuthToken = $config->vcsAuthToken ?? getenv('I18N_MRG_VCS_AUTH_TOKEN');
+        $config->gitlabAuthToken = getenv('I18N_MRG_GITLAB_AUTH_TOKEN');
+        $config->githubAuthToken = getenv('I18N_MRG_GITHUB_AUTH_TOKEN');
         $config->vcsUsername = $config->vcsUsername ?? getenv('I18N_MRG_VCS_USERNAME');
         $config->vcsPassword = $config->vcsPassword ?? getenv('I18N_MRG_VCS_PASSWORD');
         $config->weblateAuthToken = $config->weblateAuthToken ?? getenv('I18N_WEBLATE_AUTH_TOKEN');
