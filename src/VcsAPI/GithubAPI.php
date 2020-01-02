@@ -67,7 +67,7 @@ class GithubAPI extends VcsApiAbstract implements IVcsApi
                         'Authorization' => 'token '.$this->config->githubAuthToken,
                     ],
                     RequestOptions::JSON => [
-                        'message' => 'The commit was made by using i18n_mrg tool',
+                        'message' => 'The commit was made by i18n_mrg tool',
                         'content' => base64_encode($contents),
                         'branch' => $this->config->translationBranchName,
                         'sha' => $sha,

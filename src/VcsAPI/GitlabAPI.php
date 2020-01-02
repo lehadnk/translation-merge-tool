@@ -54,7 +54,7 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
                 ],
                 RequestOptions::JSON => [
                     'branch' => $this->config->translationBranchName,
-                    'commit_message' => 'The commit was made by using i18n_mrg tool',
+                    'commit_message' => 'The commit was made by i18n_mrg tool',
                     'actions' => $actions
                 ],
             ]
