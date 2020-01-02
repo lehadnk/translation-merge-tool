@@ -9,9 +9,9 @@
 namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\PoReader\PoPostProcessor;
-use UnitTests\AbstractTestProjectCase;
+use UnitTests\AbstractCase;
 
-class PoPostProcessorTest extends AbstractTestProjectCase
+class PoPostProcessorTest extends AbstractCase
 {
     private $malformedString = '#~ msgid ""';
 

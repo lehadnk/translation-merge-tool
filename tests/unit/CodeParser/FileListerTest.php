@@ -9,9 +9,9 @@
 namespace CodeParser;
 
 use TranslationMergeTool\CodeParser\FileLister;
-use UnitTests\AbstractTestProjectCase;
+use UnitTests\AbstractCase;
 
-class FileListerTest extends AbstractTestProjectCase
+class FileListerTest extends AbstractCase
 {
     public function testGetFileList()
     {

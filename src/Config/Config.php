@@ -39,16 +39,6 @@ class Config
     public $vcsRepository;
 
     /**
-     * @MarshallProperty(name="vcsAuthToken", type="string")
-     */
-    public $githubAuthToken;
-
-    /**
-     * @MarshallProperty(name="vcsAuthToken", type="string")
-     */
-    public $gitlabAuthToken;
-
-    /**
      * @MarshallProperty(name="translationBranchName", type="string")
      */
     public $translationBranchName;
@@ -83,4 +73,14 @@ class Config
      * @MarshallProperty(name="outputJson", type="bool")
      */
     public $outputJson;
+
+    /**
+     * @var string?
+     */
+    public $githubAuthToken;
+
+    /**
+     * @var string?
+     */
+    public $gitlabAuthToken;
 }

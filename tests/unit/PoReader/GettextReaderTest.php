@@ -10,9 +10,9 @@ namespace UnitTests\PoReader;
 
 use TranslationMergeTool\DTO\TranslationString;
 use TranslationMergeTool\PoReader\GettextReader;
-use UnitTests\AbstractTestProjectCase;
+use UnitTests\AbstractCase;
 
-class GettextReaderTest extends AbstractTestProjectCase
+class GettextReaderTest extends AbstractCase
 {
 
     public function testAddNewTranslations()

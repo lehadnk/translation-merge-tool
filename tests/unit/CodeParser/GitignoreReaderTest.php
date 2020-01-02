@@ -9,9 +9,9 @@
 namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\CodeParser\GitignoreReader;
-use UnitTests\AbstractTestProjectCase;
+use UnitTests\AbstractCase;
 
-class GitignoreReaderTest extends AbstractTestProjectCase
+class GitignoreReaderTest extends AbstractCase
 {
 
     public function testGetIgnoredPaths()

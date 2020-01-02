@@ -9,9 +9,9 @@
 namespace unit\CodeParser;
 
 use TranslationMergeTool\CodeParser\Parser;
-use UnitTests\AbstractTestProjectCase;
+use UnitTests\AbstractCase;
 
-class ParserTest extends AbstractTestProjectCase
+class ParserTest extends AbstractCase
 {
     /**
      * @var Parser

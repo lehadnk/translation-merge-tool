@@ -13,7 +13,7 @@ use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractTestProjectCase extends TestCase
+abstract class AbstractCase extends TestCase
 {
     /**
      * @var Config
