@@ -33,6 +33,7 @@ class ParserTest extends AbstractCase
         $this->assertArrayHasKey('Smart tools module:', $strings);
         $this->assertArrayHasKey('Available tools:', $strings);
         $this->assertArrayHasKey('my translated text', $strings);
+        $this->assertArrayHasKey('After you press the "Create campaign" button the campaign will be created and sent to the moderation. You can change it anytime', $strings);
     }
 
     public function testParseFile()
