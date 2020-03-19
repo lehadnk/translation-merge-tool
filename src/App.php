@@ -295,7 +295,7 @@ class App extends CLI
 
         $result = $this->vcsAPI->commit();
 
-        if ($result->getStatusCode()[0] === 2) {
+        if ($result->getStatusCode() === 2) {
             $this->error("Unable to push {$translationFile->relativePath} to the repository!");
             $this->debug($result->getStatusCode());
             $this->debug($result->getReasonPhrase());
@@ -345,7 +345,7 @@ class App extends CLI
 
             $moPath = $translationFile->getAbsolutePathToMo();
 
-            exec("msgfmt -o $moPath {$translationFile->absolutePath}");
+            exec("msgfmt -o $moPath {$translationFile->absolutePath} > /dev/null 2>&1");
             if ($this->config->outputJson) {
                 exec("i18next-conv -l {$translationFile->weblateCode} -s {$translationFile->absolutePath} -t {$translationFile->absolutePath}.json");
             }
