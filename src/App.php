@@ -15,6 +15,8 @@ use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 use TranslationMergeTool\PoReader\PoPostProcessor;
+use TranslationMergeTool\System\Git;
+use TranslationMergeTool\System\Msgfmt;
 use TranslationMergeTool\VcsAPI\VcsApiFactory;
 use TranslationMergeTool\VcsAPI\IVcsApi;
 use TranslationMergeTool\CodeParser\Parser;
@@ -48,6 +50,16 @@ class App extends CLI
     private $weblateAPI;
 
     /**
+     * @var Git
+     */
+    private $gitSoftware;
+
+    /**
+     * @var Msgfmt
+     */
+    private $msgfmtSoftware;
+
+    /**
      * @var int
      */
     private $newStringsTotal = 0;
@@ -68,9 +80,16 @@ class App extends CLI
 
     protected function main(Options $options)
     {
+        $this->gitSoftware = new Git();
+        $this->msgfmtSoftware = new Msgfmt();
+
         if ($this->options->getOpt('version')) {
             $this->info($this->getVersion());
             exit(0);
+        }
+
+        if (!$this->checkSystemRequirements()) {
+            exit(1);
         }
 
         $configFileName = $this->workingDir.'.translate-config.json';
@@ -107,10 +126,10 @@ class App extends CLI
         }
         $this->workingDir = getcwd();
 
-        $this->updateTranslations();
+        $this->runSoftware();
     }
 
-    private function updateTranslations()
+    private function runSoftware()
     {
         if ($this->options->getOpt('weblate-pull')) {
             $this->pullWeblateComponent();
@@ -358,14 +377,9 @@ class App extends CLI
         return $composerJson->version;
     }
 
-    private function getCurrentBranch()
-    {
-        return trim(`git branch | grep \* | cut -d ' ' -f2`);
-    }
-
     private function prune()
     {
-        if ($this->getCurrentBranch() !== 'master') {
+        if ($this->getCurrentBranchName() !== 'master') {
             $this->error("The --prune argument could be run from master branch only! Please consider running: ".PHP_EOL."git checkout master");
             return;
         }
@@ -438,5 +452,20 @@ class App extends CLI
         $translationFile->isNew = false;
         $this->info("New language was added to the list. Now go to Weblate frontend, navigate to Manage > Repository maintenance, and click pull button, then re-run this tool after new language will be added.");
         exit(1);
+    }
+
+    private function checkSystemRequirements(): bool
+    {
+        if (!$this->gitSoftware->isInstalled()) {
+            $this->error('git is not installed, but required to use i18n_mrg');
+            return false;
+        }
+
+        if (!$this->msgfmtSoftware->isInstalled()) {
+            $this->error('msgfmt is not installed, but required to use i18n_mrg');
+            return false;
+        }
+
+        return true;
     }
 }
