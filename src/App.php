@@ -208,9 +208,7 @@ class App extends CLI
                 $this->info("i18n_mrg --print-untranslated");
             }
 
-            $this->warning("");
-            $this->warning("Don't create PR until untranslated string count for RU is 0");
-            $this->warning("");
+            $this->success("Translation update success");
         }
     }
 
@@ -259,7 +257,7 @@ class App extends CLI
                 $this->newStringsTotal += $addedStringsCount;
                 $addedStringsStr = implode("\n\t", $addedStrings);
                 $this->info("Added $addedStringsCount new strings!");
-                $this->debug("$addedStringsStr\n\n");
+                $this->debug("\n\t$addedStringsStr\n\n");
             }
         }
 

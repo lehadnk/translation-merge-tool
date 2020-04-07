@@ -11,6 +11,7 @@ namespace TranslationMergeTool\VcsAPI;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
+use TranslationMergeTool\Console;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
 
 class GitlabAPI extends VcsApiAbstract implements IVcsApi
@@ -22,7 +23,7 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
 
     protected function validateConfig(): void
     {
-        if ($this->config->gitlabAuthToken === null) {
+        if (empty($this->config->gitlabAuthToken)) {
             throw new NoAuthTokenException();
         }
     }
@@ -36,6 +37,8 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
     public function commit():ResponseInterface
     {
         $slug = urlencode($this->config->vcsRepository);
+
+        Console::debug("Using gitlab auth token {$this->config->gitlabAuthToken}...");
 
         $actions = [];
         foreach ($this->fileList as $translationFile) {
