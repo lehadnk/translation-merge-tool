@@ -69,3 +69,9 @@ Run the following command under your project root:
 ```
 i18n_mrg
 ```
+
+#Troubleshooting
+If you haven't gettext on macOS, you can install it using brew:
+```
+brew link gettext && brew link gettext
+```
