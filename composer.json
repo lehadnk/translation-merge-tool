@@ -15,7 +15,7 @@
         "ext-json": "*",
         "php": "^7.1",
         "ext-readline": "*",
-        "splitbrain/php-cli": "dev-master#fb4f888"
+        "splitbrain/php-cli": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -26,7 +26,7 @@
     "bin": [
         "bin/i18n_mrg"
     ],
-    "version": "1.2.2",
+    "version": "1.2.3",
     "require-dev": {
         "phpunit/phpunit": "^7"
     }
