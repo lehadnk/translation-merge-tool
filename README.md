@@ -31,6 +31,23 @@ composer global require giftd/translation-merge-tool
 composer global update giftd/translation-merge-tool
 ```
 
+# Handling authorization tokens
+To use the tool with various VCS providers, you must setup authorization.
+
+#### Gitlab
+1. Create the key using your profile settings > Access Tokens.
+2. Your key must have next scopes: api, read_repository, write_repository
+3. Export your token to I18N_MRG_GITLAB_AUTH_TOKEN env variable: `export I18N_MRG_GITLAB_AUTH_TOKEN=<token>`
+
+### Github
+1. Goto Settings > Developer Settings > Personal access tokens
+2. Create a token with scope: repo
+3. Export your token to I18N_MRG_GITHUB_AUTH_TOKEN env variable: `export I18N_MRG_GITHUB_AUTH_TOKEN=<token>`
+
+### BitBucket
+1. Place your username under I18N_MRG_BITBUCKET_USERNAME env variable: `export I18N_MRG_BITBUCKET_USERNAME=<username>`
+2. Place your password under I18N_MRG_BITBUCKET_PASSWORD env variable: `export I18N_MRG_BITBUCKET_PASSWORD=<password>`
+
 #How to add it to the project
 First, you need create `.translate-config.json` configuration file under the project's root. An example contents of config file you can always get here:
 ```

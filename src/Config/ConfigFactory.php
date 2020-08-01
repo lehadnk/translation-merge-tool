@@ -41,8 +41,8 @@ class ConfigFactory
 
         $config->gitlabAuthToken = getenv('I18N_MRG_GITLAB_AUTH_TOKEN');
         $config->githubAuthToken = getenv('I18N_MRG_GITHUB_AUTH_TOKEN');
-        $config->vcsUsername = $config->vcsUsername ?? getenv('I18N_MRG_VCS_USERNAME');
-        $config->vcsPassword = $config->vcsPassword ?? getenv('I18N_MRG_VCS_PASSWORD');
+        $config->vcsUsername = $config->vcsUsername ?? getenv('I18N_MRG_BITBUCKET_USERNAME');
+        $config->vcsPassword = $config->vcsPassword ?? getenv('I18N_MRG_BITBUCKET_PASSWORD');
         $config->weblateAuthToken = $config->weblateAuthToken ?? getenv('I18N_WEBLATE_AUTH_TOKEN');
 
         return $config;
