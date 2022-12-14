@@ -123,7 +123,7 @@ class WeblateAPI implements IWeblateAPI
     public function downloadTranslation(string $localeName): string
     {
         $result = $this->httpClient->get(
-            "translations/{$this->projectSlug}/{$this->componentSlug}/$localeName/file",
+            "translations/{$this->projectSlug}/{$this->componentSlug}/$localeName/file/",
             [
                 'headers' => [
                     'Authorization' => 'Token '.$this->token,

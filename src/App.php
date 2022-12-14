@@ -115,7 +115,7 @@ class App extends CLI
             exit(0);
         } catch (NoAuthTokenException $ex) {
             $this->error("Error! No {$this->config->vcs} authentication token found.");
-            $this->info("Please consider adding I18N_MRG_VCS_AUTH_TOKEN environment variable into your ~\.bash_profile");
+            $this->info("Please consider adding the corresponding environment variable into your ~\.bash_profile");
             exit(0);
         } catch (ConfigValidationException $ex) {
             $this->error($ex->getMessage());

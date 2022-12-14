@@ -75,6 +75,11 @@ class Config
     public $outputJson;
 
     /**
+     * @MarshallProperty(name="vcsHostName", type="string")
+     */
+    public $vcsHostName;
+
+    /**
      * @var string?
      */
     public $githubAuthToken;
