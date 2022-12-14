@@ -54,7 +54,7 @@ class FileLister
 
         $directory = new \RecursiveDirectoryIterator($path);
         $iterator = new \RecursiveIteratorIterator($directory);
-        $fileList = new \RegexIterator($iterator, '/^.+\.(?:php|js|ts|tsx|vue)$/i', \RegexIterator::GET_MATCH);
+        $fileList = new \RegexIterator($iterator, '/^.+\.(?:php|js|ts|tsx|vue|java)$/i', \RegexIterator::GET_MATCH);
 
         $list = [];
         foreach ($fileList as $file) {
