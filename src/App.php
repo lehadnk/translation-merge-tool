@@ -83,6 +83,8 @@ class App extends CLI
         $this->gitSoftware = new Git();
         $this->msgfmtSoftware = new Msgfmt();
 
+        $this->workingDir = getcwd();
+
         if ($this->options->getOpt('version')) {
             $this->info($this->getVersion());
             exit(0);
@@ -92,7 +94,7 @@ class App extends CLI
             exit(1);
         }
 
-        $configFileName = $this->workingDir.'.translate-config.json';
+        $configFileName = $this->workingDir.'/.translate-config.json';
         if (!file_exists($configFileName)) {
             $this->critical("Can't find translation config at ".$configFileName."! The application will terminate");
             exit(1);
@@ -124,7 +126,6 @@ class App extends CLI
         if ($this->options->getOpt('no-weblate')) {
             $this->weblateAPI = new MockWeblateAPI();
         }
-        $this->workingDir = getcwd();
 
         $this->runSoftware();
     }
