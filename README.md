@@ -1,7 +1,7 @@
 # Installation
 The software you need to install the translation merge tool:
 - PHP >= 7.0
-- [Composer](https://getcomposer.org/download/) packet manager
+- [Composer](https://getcomposer.org/download/) package manager
 - [GNU Gettext](https://www.gnu.org/software/gettext/) package (already installed in most macOS/Linux versions)
 - NodeJS >= 6.0 (for JS projects)
 - [i18next converter](https://github.com/i18next/i18next-gettext-converter) (if you use i18next for your js project)
