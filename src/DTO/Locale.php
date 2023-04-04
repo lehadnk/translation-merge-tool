@@ -26,6 +26,8 @@ class Locale
     {
         if ($localeName === 'zh_CN') return 'zh_Hans';
         if ($localeName === 'en_US') return 'en_US';
+        if ($localeName === 'en_GB') return 'en_GB';
+
         return explode('_', $localeName)[0];
     }
 }
