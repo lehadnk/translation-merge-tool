@@ -1,5 +1,5 @@
 {
-  "configVersion": "1.1.13",
+  "configVersion": "1.2.0",
 
   "components": [
     {
@@ -16,10 +16,9 @@
   ],
 
   "vcs": "bitbucket",
-  "vcsUsername": "test@bitbucket.user",
-  "vcsPassword": "test-password",
+  "bitbucketUsername": "test@bitbucket.user",
+  "bitbucketPassword": "test-password",
   "vcsRepository": "test/repository",
-  "vcsAuthToken": "test-token",
 
   "translationBranchName": "translation",
 

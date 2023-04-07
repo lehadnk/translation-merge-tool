@@ -36,7 +36,7 @@ class VcsApiFactory
             return new GithubAPI($config);
         }
         if ($config->vcs === 'mock') {
-            return new MockIVcsAPI();
+            return new MockVcsAPI();
         }
         throw new Exception("No API class found for {$config->vcs}");
     }

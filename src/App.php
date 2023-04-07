@@ -11,6 +11,7 @@ namespace TranslationMergeTool;
 use splitbrain\phpcli\CLI;
 use splitbrain\phpcli\Options;
 use TranslationMergeTool\Config\ComposerJson\ComposerJsonFactory;
+use TranslationMergeTool\Environment\EnvironmentFactory;
 use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthCredentialsException;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
@@ -100,8 +101,12 @@ class App extends CLI
             exit(1);
         }
 
+        $environmentFactory = new EnvironmentFactory();
+        $environment = $environmentFactory->build();
+
         try {
-            $this->config = ConfigFactory::read($configFileName);
+            $configFactory = new ConfigFactory($environment);
+            $this->config = $configFactory->read($configFileName);
         } catch (ConfigValidationException $e) {
             $this->error($e->getMessage());
             return;
@@ -374,7 +379,9 @@ class App extends CLI
 
     private function getVersion()
     {
-        $composerJson = ComposerJsonFactory::read();
+        $composerJsonFactory = new ComposerJsonFactory();
+        $composerJson = $composerJsonFactory->read();
+
         return $composerJson->version;
     }
 

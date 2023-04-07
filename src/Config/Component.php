@@ -7,31 +7,23 @@
  */
 
 namespace TranslationMergeTool\Config;
-use PhpJsonMarshaller\Annotations\MarshallProperty;
 use TranslationMergeTool\DTO\Locale;
 use TranslationMergeTool\Exceptions\ConfigValidation\DirectoryNotFoundException;
 
 class Component
 {
-    /**
-     * @MarshallProperty(name="name", type="string")
-     */
-    public $name;
+    public string $name;
+    public string $translationFileName;
 
     /**
-     * @MarshallProperty(name="includePaths", type="string[]")
+     * @var string[]
      */
-    public $includePaths;
+    public array $includePaths = [];
 
     /**
-     * @MarshallProperty(name="excludePaths", type="string[]")
+     * @var string[]
      */
-    public $excludePaths;
-
-    /**
-     * @MarshallProperty(name="translationFileName", type="string")
-     */
-    public $translationFileName;
+    public array $excludePaths = [];
 
     public function getTranslationFileName(string $languageCode): string
     {

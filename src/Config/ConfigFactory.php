@@ -8,48 +8,44 @@
 
 namespace TranslationMergeTool\Config;
 
-use PhpJsonMarshaller\Decoder\ClassDecoder;
-use PhpJsonMarshaller\Exception\JsonDecodeException;
-use PhpJsonMarshaller\Exception\UnknownPropertyException;
-use PhpJsonMarshaller\Marshaller\JsonMarshaller;
-use PhpJsonMarshaller\Reader\DoctrineAnnotationReader;
-use TranslationMergeTool\Exceptions\ConfigValidation\ConfigValidationException;
+use JsonMapper\JsonMapperFactory;
+use JsonMapper\JsonMapperInterface;
+use TranslationMergeTool\Environment\Environment;
 use TranslationMergeTool\Exceptions\ConfigValidation\ConfigVersionMismatch;
 
 class ConfigFactory
 {
-    const ACCEPTS_CONFIG_VERSIONS = ['1.1.13'];
+    const ACCEPTS_CONFIG_VERSIONS = ['1.2.0'];
 
-    public static function read(string $fileName): Config {
-        $contents = file_get_contents($fileName);
+    public function __construct(
+        private readonly Environment $environment
+    ) {
+    }
 
-        $marshaller = new JsonMarshaller(new ClassDecoder(new DoctrineAnnotationReader()));
-        /**
-         * @var $config Config
-         */
-        try {
-            $config = $marshaller->unmarshall($contents, Config::class);
-        } catch (JsonDecodeException $e) {
-            throw new ConfigValidationException(".translate-config.json is corrupt. Please make sure that it's correct json structure.");
-        } catch (UnknownPropertyException $e) {
-            throw new ConfigValidationException(".translate-config.json is lacking for some mandatory fields. Please make sure that the config structure is fully valid.");
+    public function read(string $fileName): Config {
+        $config = $this->getJsonMapper()->mapToClassFromString(file_get_contents($fileName), Config::class);
+
+        if (!$this->isConfigVersionAccepted($config->configVersion)) {
+            throw new ConfigVersionMismatch("The only accepts config versions of ".implode(', ', self::ACCEPTS_CONFIG_VERSIONS)." while the current config version is {$config->configVersion}. You must either update tool or .translate-config.json.");
         }
 
-        if (!self::isConfigVersionAccepted($config->configVersion)) {
-            throw new ConfigVersionMismatch("The tool accepts only config versions ".implode(',', self::ACCEPTS_CONFIG_VERSIONS)." while config version is {$config->configVersion}. You must either update tool or config");
-        }
-
-        $config->gitlabAuthToken = getenv('I18N_MRG_GITLAB_AUTH_TOKEN');
-        $config->githubAuthToken = getenv('I18N_MRG_GITHUB_AUTH_TOKEN');
-        $config->vcsUsername = $config->vcsUsername ?? getenv('I18N_MRG_BITBUCKET_USERNAME');
-        $config->vcsPassword = $config->vcsPassword ?? getenv('I18N_MRG_BITBUCKET_PASSWORD');
-        $config->weblateAuthToken = $config->weblateAuthToken ?? getenv('I18N_WEBLATE_AUTH_TOKEN');
+        $config->gitlabAuthToken = $this->environment->gitlabAuthToken;
+        $config->githubAuthToken = $this->environment->githubAuthToken;
+        $config->bitbucketUsername =  $this->environment->bitbucketUsername ?? $config->bitbucketUsername;
+        $config->bitbucketPassword = $this->environment->bitbucketPassword ?? $config->bitbucketPassword;
+        $config->weblateAuthToken = $this->environment->weblateAuthToken ?? $config->weblateAuthToken;
 
         return $config;
     }
 
-    private static function isConfigVersionAccepted(string $versionTag): bool
+    private function isConfigVersionAccepted(string $versionTag): bool
     {
         return in_array($versionTag, self::ACCEPTS_CONFIG_VERSIONS);
+    }
+
+    private function getJsonMapper(): JsonMapperInterface
+    {
+        $mapperFactory = new JsonMapperFactory();
+        return $mapperFactory->bestFit();
     }
 }

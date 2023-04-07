@@ -6,19 +6,16 @@
  * Time: 18:45
  */
 
-namespace unit\CodeParser;
+namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\CodeParser\Parser;
 use UnitTests\AbstractCase;
 
 class ParserTest extends AbstractCase
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
+    private Parser $parser;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->parser = new Parser($this->getTestComponent(), $this->getTestProjectDir(), 'test');

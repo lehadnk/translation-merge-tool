@@ -8,84 +8,25 @@
 
 namespace TranslationMergeTool\Config;
 
-use PhpJsonMarshaller\Annotations\MarshallProperty;
-
 class Config
 {
-    /**
-     * @MarshallProperty(name="configVersion", type="string")
-     */
-    public $configVersion;
+    public string $configVersion;
+    public string $vcs;
+    public ?string $vcsHostName = null;
+    public ?string $bitbucketUsername = null;
+    public ?string $bitbucketPassword = null;
+    public string $vcsRepository;
+    public ?string $gitlabAuthToken = null;
+    public ?string $githubAuthToken = null;
+    public string $translationBranchName;
+    public string $weblateServiceUrl;
+    public string $weblateProjectSlug;
+    public string $weblateComponentSlug;
+    public string $weblateAuthToken;
+    public bool $outputJson = false;
 
     /**
-     * @MarshallProperty(name="vcs", type="string")
-     * @var Component[]
-     */
-    public $vcs;
-
-    /**
-     * @MarshallProperty(name="vcsUsername", type="string")
-     */
-    public $vcsUsername;
-
-    /**
-     * @MarshallProperty(name="vcsPassword", type="string")
-     */
-    public $vcsPassword;
-
-    /**
-     * @MarshallProperty(name="vcsRepository", type="string")
-     */
-    public $vcsRepository;
-
-    /**
-     * @MarshallProperty(name="translationBranchName", type="string")
-     */
-    public $translationBranchName;
-
-    /**
-     * @MarshallProperty(name="weblateServiceUrl", type="string")
-     */
-    public $weblateServiceUrl;
-
-    /**
-     * @MarshallProperty(name="weblateProjectSlug", type="string")
-     */
-    public $weblateProjectSlug;
-
-    /**
-     * @MarshallProperty(name="weblateComponentSlug", type="string")
-     */
-    public $weblateComponentSlug;
-
-    /**
-     * @MarshallProperty(name="weblateAuthToken", type="string")
-     */
-    public $weblateAuthToken;
-
-    /**
-     * @MarshallProperty(name="components", type="\TranslationMergeTool\Config\Component[]")
      * @var Component[]
      */
     public $components;
-
-    /**
-     * @MarshallProperty(name="outputJson", type="bool")
-     */
-    public $outputJson;
-
-    /**
-     * @MarshallProperty(name="vcsHostName", type="string")
-     */
-    public $vcsHostName;
-
-    /**
-     * @var string?
-     */
-    public $githubAuthToken;
-
-    /**
-     * @var string?
-     */
-    public $gitlabAuthToken;
 }

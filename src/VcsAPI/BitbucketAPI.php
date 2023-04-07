@@ -55,13 +55,13 @@ class BitbucketAPI extends VcsApiAbstract implements IVcsApi
     {
         return new Client([
             'base_uri' => $this->baseUri,
-            'auth' => [$this->config->vcsUsername, $this->config->vcsPassword],
+            'auth' => [$this->config->bitbucketUsername, $this->config->bitbucketPassword],
         ]);
     }
 
     protected function validateConfig(): void
     {
-        if (!$this->config->vcsUsername || !$this->config->vcsPassword) {
+        if (!$this->config->bitbucketUsername || !$this->config->bitbucketPassword) {
             throw new NoAuthCredentialsException();
         }
     }

@@ -1,5 +1,5 @@
 {
-  "configVersion": "1.1.13",
+  "configVersion": "1.2.0",
 
   "components": [
     {
@@ -14,14 +14,13 @@
   ],
 
   "vcs": "bitbucket",
-  "vcsUsername": "lehadnk@gmail.com",
+  "vcsUsername": "lehadnk@test.com",
   "vcsPassword": "password",
-  "vcsRepository": "nevidimov/giftd-crm",
-  "vcsAuthToken": "token",
+  "vcsRepository": "lehadnk/crm",
 
   "translationBranchName": "translation",
 
-  "weblateServiceUrl": "http://159.65.200.211",
+  "weblateServiceUrl": "http://weblate.test.com",
   "weblateProjectSlug": "crm",
   "weblateComponentSlug": "main",
   "weblateAuthToken": "token",

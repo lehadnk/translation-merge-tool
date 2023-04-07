@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use TranslationMergeTool\Console;
 use TranslationMergeTool\DTO\TranslationFile;
 
-class MockIVcsAPI implements IVcsApi
+class MockVcsAPI implements IVcsApi
 {
     /**
      * @var TranslationFile[]

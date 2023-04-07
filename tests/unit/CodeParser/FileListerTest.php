@@ -6,7 +6,7 @@
  * Time: 17:34
  */
 
-namespace CodeParser;
+namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\CodeParser\FileLister;
 use UnitTests\AbstractCase;

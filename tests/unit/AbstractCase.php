@@ -12,17 +12,39 @@ use TranslationMergeTool\Config\Component;
 use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Config\ConfigFactory;
 use PHPUnit\Framework\TestCase;
+use TranslationMergeTool\Environment\Environment;
 
 abstract class AbstractCase extends TestCase
 {
-    /**
-     * @var Config
-     */
-    protected $config;
+    protected Config $config;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->config = ConfigFactory::read($this->getTestProjectDir().'/.translate-config.json');
+        $this->config = $this->getTestConfig();
+    }
+
+    protected function getTestConfig(): Config
+    {
+        $environment = $this->getEnvironment();
+        $configFactory = new ConfigFactory($environment);
+
+        return $configFactory->read($this->getTestConfigPath());
+    }
+
+    protected function getEnvironment(): Environment
+    {
+        return new Environment(
+            'test-gitlab-auth-token',
+            'test-github-auth-token',
+            'test-bitbucket-username',
+            'test-bitbucket-password',
+            'test-weblate-auth-token',
+        );
+    }
+
+    protected function getTestConfigPath(): string
+    {
+        return $this->getTestProjectDir().'/.translate-config.json';
     }
 
     protected function getTestProjectDir()
