@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 27/11/2018
- * Time: 19:09
- */
 
-namespace project\src;
+namespace resources\project\src;
 
 
 class ExtremelyComplicatedFile

@@ -1,5 +1,5 @@
 {
-  "configVersion": "1.2.0",
+  "configVersion": "1.3.0",
 
   "components": [
     {
@@ -11,7 +11,9 @@
       "excludePaths": [
         "src/excludedDirectory"
       ],
-      "translationFileName": "translations/{localeName}/translation.po"
+      "translationFileName": "translations/{localeName}/translation.po",
+      "weblateProjectSlug": "crm",
+      "weblateComponentSlug": "main"
     }
   ],
 
@@ -23,7 +25,5 @@
   "translationBranchName": "translation",
 
   "weblateServiceUrl": "http://weblate-test-server.local",
-  "weblateProjectSlug": "crm",
-  "weblateComponentSlug": "main",
   "weblateAuthToken": "token"
 }

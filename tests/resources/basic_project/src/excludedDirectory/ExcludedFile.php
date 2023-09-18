@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 27/11/2018
- * Time: 18:54
- */
 
-namespace project\src\excludedDirectory;
+namespace resources\project\src\excludedDirectory;
 
 
 class ExcludedFile

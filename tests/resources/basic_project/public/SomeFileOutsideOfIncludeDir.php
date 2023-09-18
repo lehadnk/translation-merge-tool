@@ -1,11 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 2018-12-13
- * Time: 14:35
- */
 
+namespace resources\project\public;
 class SomeFileOutsideOfIncludeDir
 {
     public function test()

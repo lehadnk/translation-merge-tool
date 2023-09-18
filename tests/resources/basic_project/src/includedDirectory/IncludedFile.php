@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 27/11/2018
- * Time: 18:54
- */
 
-namespace project\src\includedDirectory;
+namespace resources\project\src\includedDirectory;
 
 
 class IncludedFile
