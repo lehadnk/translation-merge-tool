@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 10/7/18
- * Time: 1:40 PM
- */
 
 namespace TranslationMergeTool\Config;
 
@@ -15,7 +9,7 @@ use TranslationMergeTool\Exceptions\ConfigValidation\ConfigVersionMismatch;
 
 class ConfigFactory
 {
-    const ACCEPTS_CONFIG_VERSIONS = ['1.2.0'];
+    const ACCEPTS_CONFIG_VERSIONS = ['1.3.0'];
 
     public function __construct(
         private readonly Environment $environment

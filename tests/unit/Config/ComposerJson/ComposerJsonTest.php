@@ -1,20 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 2018-12-05
- * Time: 16:43
- */
 
 namespace UnitTests\Config\ComposerJson;
 
 use TranslationMergeTool\Config\ComposerJson\ComposerJsonFactory;
+use UnitTests\AbstractBasicCase;
 use UnitTests\AbstractCase;
 
-class ComposerJsonTest extends AbstractCase
+class ComposerJsonTest extends AbstractBasicCase
 {
-
-    public function testAddNewTranslations()
+    public function testReadingComposerJson()
     {
         $composerJsonFactory = new ComposerJsonFactory();
         $composerJson = $composerJsonFactory->read();

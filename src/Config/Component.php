@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 10/7/18
- * Time: 2:10 PM
- */
 
 namespace TranslationMergeTool\Config;
 use TranslationMergeTool\DTO\Locale;
@@ -14,6 +8,8 @@ class Component
 {
     public string $name;
     public string $translationFileName;
+    public string $weblateComponentSlug;
+    public string $weblateProjectSlug;
 
     /**
      * @var string[]

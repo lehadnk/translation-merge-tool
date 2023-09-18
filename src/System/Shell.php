@@ -6,7 +6,7 @@ namespace TranslationMergeTool\System;
 
 use TranslationMergeTool\DTO\RunCommandResult;
 
-class Terminal
+class Shell
 {
     public static function run(string $command): RunCommandResult
     {

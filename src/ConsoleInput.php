@@ -11,7 +11,7 @@ use TranslationMergeTool\Output\CliOutputInterface;
 use TranslationMergeTool\System\Git;
 use TranslationMergeTool\System\Msgfmt;
 
-class App extends CLI
+class ConsoleInput extends CLI
 {
     protected function setup(Options $options)
     {

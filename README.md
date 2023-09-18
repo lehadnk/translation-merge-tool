@@ -66,7 +66,7 @@ public class ScoreHandler {
 3. Add `.translate-config.json` to your project root. The example contents of the file:
 ```
 {
-  "configVersion": "1.2.0",
+  "configVersion": "1.3.0",
 
   "components": [
     {
@@ -76,7 +76,9 @@ public class ScoreHandler {
         "resources/"
       ],
       "excludePaths": [],
-      "translationFileName": "resources/lang/i18n/{localeName}/LC_MESSAGES/default.po"
+      "translationFileName": "resources/lang/i18n/{localeName}/LC_MESSAGES/default.po",
+      "weblateProjectSlug": "crm",
+      "weblateComponentSlug": "main"
     }
   ],
 
@@ -89,8 +91,6 @@ public class ScoreHandler {
   "translationBranchName": "translation",
 
   "weblateServiceUrl": "http://weblate.service.com",
-  "weblateProjectSlug": "crm",
-  "weblateComponentSlug": "main",
   "weblateAuthToken": "token"
 }
 ```

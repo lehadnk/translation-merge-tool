@@ -19,4 +19,4 @@ msgstr ""
 # Branch: master
 #: databroker/DatabrokerApplication.php
 msgid "Translation key from databroker application"
-msgstr ""
+msgstr "It's translated"

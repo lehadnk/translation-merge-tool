@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 10/7/18
- * Time: 10:53 PM
- */
 
 namespace TranslationMergeTool\PoReader;
 

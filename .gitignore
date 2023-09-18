@@ -2,4 +2,5 @@ vendor
 .idea
 .DS_Store
 tests/coverage
+tests/tmp
 .phpunit.result.cache

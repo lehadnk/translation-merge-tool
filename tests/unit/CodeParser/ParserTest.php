@@ -1,24 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 27/11/2018
- * Time: 18:45
- */
 
 namespace UnitTests\CodeParser;
 
-use TranslationMergeTool\CodeParser\Parser;
+use TranslationMergeTool\CodeParser\ComponentParser;
+use UnitTests\AbstractBasicCase;
 use UnitTests\AbstractCase;
 
-class ParserTest extends AbstractCase
+class ParserTest extends AbstractBasicCase
 {
-    private Parser $parser;
+    private ComponentParser $parser;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->parser = new Parser($this->getTestComponent(), $this->getTestProjectDir(), 'test');
+        $this->parser = new ComponentParser($this->getTestComponent(), $this->getTestProjectDir(), 'test');
     }
 
     public function testGetStrings()

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 10/7/18
- * Time: 10:09 PM
- */
 
 namespace TranslationMergeTool\CodeParser;
 
@@ -13,7 +7,7 @@ use TranslationMergeTool\Config\Component;
 use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\DTO\TranslationString;
 
-class Parser
+class ComponentParser
 {
     const REGEXPS = [
         '"' => [

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 10/7/18
- * Time: 2:32 PM
- */
 
 namespace TranslationMergeTool\VcsAPI;
 
@@ -64,5 +58,10 @@ class BitbucketAPI extends VcsApiAbstract implements IVcsApi
         if (!$this->config->bitbucketUsername || !$this->config->bitbucketPassword) {
             throw new NoAuthCredentialsException();
         }
+    }
+
+    public function getProviderName(): string
+    {
+        return "Bitbucket";
     }
 }

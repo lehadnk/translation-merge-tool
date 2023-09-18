@@ -8,6 +8,11 @@ class Git implements ExternalApplication
 {
     public function isInstalled(): bool
     {
-        return Terminal::run('git')->code !== 127;
+        return Shell::run('git')->code !== 127;
+    }
+
+    public function getCurrentBranchName(): string
+    {
+        return trim(`git rev-parse --abbrev-ref HEAD`);
     }
 }

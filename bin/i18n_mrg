@@ -11,6 +11,5 @@ if (file_exists($vendor_path)) {
     die("Can't manage to load autoload.php!");
 }
 
-$workingDir = getcwd();
-$app = new \TranslationMergeTool\App($workingDir);
-$app->run();
+$consoleInput = new \TranslationMergeTool\ConsoleInput();
+$consoleInput->run();

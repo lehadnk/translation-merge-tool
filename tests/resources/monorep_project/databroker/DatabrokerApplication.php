@@ -1,5 +1,6 @@
 <?php
 
+namespace resources\monorep_project\databroker;
 class DatabrokerApplication
 {
     public function main()

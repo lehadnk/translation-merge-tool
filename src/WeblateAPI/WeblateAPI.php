@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 10/7/18
- * Time: 2:32 PM
- */
 
 namespace TranslationMergeTool\WeblateAPI;
 
@@ -14,46 +8,27 @@ use TranslationMergeTool\Config\Config;
 
 class WeblateAPI implements IWeblateAPI
 {
-    /**
-     * @var string
-     */
-    private $authToken;
-
-    /**
-     * @var string
-     */
-    private $projectSlug;
-
-    /**
-     * @var string
-     */
-    private $componentSlug;
-
-    /**
-     * @var Client
-     */
-    private $httpClient;
-
-    /**
-     * @var string
-     */
-    private $token;
+    private Client $httpClient;
+    private string $authToken;
 
     public function __construct(Config $config)
     {
         $this->authToken = $config->weblateAuthToken;
-        $this->projectSlug = $config->weblateProjectSlug;
-        $this->token = $config->weblateAuthToken;
-        $this->componentSlug = $config->weblateComponentSlug;
 
         $this->httpClient = new Client([
             'base_uri' => $config->weblateServiceUrl.'/api/',
         ]);
     }
 
-    public function commitComponent() {
+    /**
+     * curl \
+     * -d operation=commit \
+     * -H "Authorization: Token token" \
+     * http://159.65.200.211/api/components/crm/translate/repository/
+     */
+    public function commitComponent(string $projectSlug, string $componentSlug) {
         $this->httpClient->post(
-            "components/{$this->projectSlug}/{$this->componentSlug}/repository/",
+            "components/{$projectSlug}/{$componentSlug}/repository/",
             [
                 'multipart' => [
                     [
@@ -62,15 +37,21 @@ class WeblateAPI implements IWeblateAPI
                     ]
                 ],
                 'headers' => [
-                    'Authorization' => 'Token '.$this->token,
+                    'Authorization' => 'Token '.$this->authToken,
                 ]
             ]
         );
     }
 
-    public function pushComponent() {
+    /**
+     * curl \
+     * -d operation=push \
+     * -H "Authorization: Token token" \
+     * http://159.65.200.211/api/components/crm/translate/repository/
+     */
+    public function pushComponent(string $projectSlug, string $componentSlug) {
         $this->httpClient->post(
-            "components/{$this->projectSlug}/{$this->componentSlug}/repository/",
+            "components/{$projectSlug}/{$componentSlug}/repository/",
             [
                 'multipart' => [
                     [
@@ -79,23 +60,21 @@ class WeblateAPI implements IWeblateAPI
                     ]
                 ],
                 'headers' => [
-                    'Authorization' => 'Token '.$this->token,
+                    'Authorization' => 'Token '.$this->authToken,
                 ]
             ]
         );
     }
 
     /**
-     *
-     *
      * curl \
      * -d operation=pull \
      * -H "Authorization: Token token" \
      * http://159.65.200.211/api/components/crm/translate/repository/
      */
-    public function pullComponent() {
+    public function pullComponent(string $projectSlug, string $componentSlug) {
         $this->httpClient->post(
-            "components/{$this->projectSlug}/{$this->componentSlug}/repository/",
+            "components/{$projectSlug}/{$componentSlug}/repository/",
             [
                 'multipart' => [
                     [
@@ -104,15 +83,13 @@ class WeblateAPI implements IWeblateAPI
                     ]
                 ],
                 'headers' => [
-                    'Authorization' => 'Token '.$this->token,
+                    'Authorization' => 'Token '.$this->authToken,
                 ]
             ]
         );
     }
 
     /**
-     *
-     *
      * curl -X GET \
      * -H "Authorization: Token token" \
      * -o download.po \
@@ -120,13 +97,13 @@ class WeblateAPI implements IWeblateAPI
      * @param string $localeName
      * @return string
      */
-    public function downloadTranslation(string $localeName): string
+    public function downloadTranslationFile(string $projectSlug, string $componentSlug, string $localeName): string
     {
         $result = $this->httpClient->get(
-            "translations/{$this->projectSlug}/{$this->componentSlug}/$localeName/file/",
+            "translations/{$projectSlug}/{$componentSlug}/$localeName/file/",
             [
                 'headers' => [
-                    'Authorization' => 'Token '.$this->token,
+                    'Authorization' => 'Token '.$this->authToken,
                 ]
             ]
         );

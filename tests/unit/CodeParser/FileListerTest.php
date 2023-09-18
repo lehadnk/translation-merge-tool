@@ -1,17 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 2018-11-28
- * Time: 17:34
- */
 
 namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\CodeParser\FileLister;
+use UnitTests\AbstractBasicCase;
 use UnitTests\AbstractCase;
 
-class FileListerTest extends AbstractCase
+class FileListerTest extends AbstractBasicCase
 {
     public function testGetFileList()
     {

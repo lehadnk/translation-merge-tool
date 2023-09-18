@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 10/7/18
- * Time: 11:10 PM
- */
 
 namespace TranslationMergeTool\DTO;
 

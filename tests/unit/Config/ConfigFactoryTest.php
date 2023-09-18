@@ -1,23 +1,27 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 2018-12-05
- * Time: 16:43
- */
 
 namespace UnitTests\Config;
 
+use TranslationMergeTool\Config\ConfigFactory;
+use TranslationMergeTool\Environment\Environment;
+use UnitTests\AbstractBasicCase;
 use UnitTests\AbstractCase;
 
-class ConfigFactoryTest extends AbstractCase
+class ConfigFactoryTest extends AbstractBasicCase
 {
-
     public function testAddNewTranslations()
     {
-        $config = $this->getTestConfig();
+        $environment = new Environment(
+            'test-gitlab-auth-token',
+            'test-github-auth-token',
+            'test-bitbucket-username',
+            'test-bitbucket-password',
+            'test-weblate-auth-token',
+        );
+        $configFactory = new ConfigFactory($environment);
+        $config = $configFactory->read($this->getTestConfigPath());
 
-        $this->assertEquals('1.2.0', $config->configVersion);
+        $this->assertEquals('1.3.0', $config->configVersion);
         $this->assertEquals('bitbucket', $config->vcs);
         $this->assertEquals('test-bitbucket-username', $config->bitbucketUsername);
         $this->assertEquals('test-bitbucket-password', $config->bitbucketPassword);
@@ -26,8 +30,6 @@ class ConfigFactoryTest extends AbstractCase
         $this->assertEquals('translation', $config->translationBranchName);
 
         $this->assertEquals('http://weblate-test-server.local', $config->weblateServiceUrl);
-        $this->assertEquals('crm', $config->weblateProjectSlug);
-        $this->assertEquals('main', $config->weblateComponentSlug);
         $this->assertEquals('test-weblate-auth-token', $config->weblateAuthToken);
 
         $this->assertEquals(1, count($config->components));
@@ -38,5 +40,7 @@ class ConfigFactoryTest extends AbstractCase
         $this->assertEquals("public/SomeFileOutsideOfIncludeDir.php", $config->components[0]->includePaths[1]);
         $this->assertEquals(1, count($config->components[0]->excludePaths));
         $this->assertEquals("src/excludedDirectory", $config->components[0]->excludePaths[0]);
+        $this->assertEquals('crm', $config->components[0]->weblateProjectSlug);
+        $this->assertEquals('main', $config->components[0]->weblateComponentSlug);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+namespace resources\monorep_project\api;
 class ApiApplication
 {
     public function main(): void

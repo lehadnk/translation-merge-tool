@@ -4,47 +4,36 @@
 namespace TranslationMergeTool\WeblateAPI;
 
 
-use TranslationMergeTool\Console;
+use TranslationMergeTool\Output\IOutputInterface;
 
 class MockWeblateAPI implements IWeblateAPI
 {
+    private IOutputInterface $outputInterface;
+    public static $downloadTranslationFileContentsLambda;
 
-    public function commitComponent()
+    public function __construct(IOutputInterface $outputInterface)
     {
-        Console::debug("Commiting weblate component...");
+        $this->outputInterface = $outputInterface;
     }
 
-    public function pushComponent()
+    public function commitComponent(string $projectSlug, string $componentSlug)
     {
-        Console::debug("Pushing weblate component");
+        $this->outputInterface->debug("Commiting weblate component...");
     }
 
-    /**
-     *
-     *
-     * curl \
-     * -d operation=pull \
-     * -H "Authorization: Token token" \
-     * http://159.65.200.211/api/components/crm/translate/repository/
-     */
-    public function pullComponent()
+    public function pushComponent(string $projectSlug, string $componentSlug)
     {
-        Console::debug("Pulling weblate component");
+        $this->outputInterface->debug("Pushing weblate component...");
     }
 
-    /**
-     *
-     *
-     * curl -X GET \
-     * -H "Authorization: Token token" \
-     * -o download.po \
-     * http://159.65.200.211/api/translations/crm/translate/tr/file/
-     * @param string $localeName
-     * @return string
-     */
-    public function downloadTranslation(string $localeName)
+    public function pullComponent(string $projectSlug, string $componentSlug)
     {
-        Console::debug("Downloading translation file $localeName");
-        return file_get_contents(__DIR__.'/../../tests/project/translations/ru/translation.po');
+        $this->outputInterface->debug("Pulling weblate component...");
+    }
+
+    public function downloadTranslationFile(string $projectSlug, string $componentSlug, string $localeName): string
+    {
+        $this->outputInterface->debug("Downloading translation file...");
+        return call_user_func(self::$downloadTranslationFileContentsLambda, $projectSlug, $componentSlug, $localeName);
     }
 }

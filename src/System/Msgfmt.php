@@ -8,6 +8,6 @@ class Msgfmt implements ExternalApplication
 {
     public function isInstalled(): bool
     {
-        return Terminal::run('msgfmt')->code !== 127;
+        return Shell::run('msgfmt')->code !== 127;
     }
 }

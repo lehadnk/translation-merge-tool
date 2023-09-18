@@ -78,4 +78,9 @@ class GithubAPI extends VcsApiAbstract implements IVcsApi
 
         return $response;
     }
+
+    public function getProviderName(): string
+    {
+        return "Github";
+    }
 }

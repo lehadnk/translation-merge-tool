@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 2018-11-28
- * Time: 17:24
- */
 
 namespace TranslationMergeTool\CodeParser;
 

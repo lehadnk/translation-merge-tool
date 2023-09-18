@@ -1,18 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 30/10/2018
- * Time: 20:03
- */
 
 namespace TranslationMergeTool\VcsAPI;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
-use TranslationMergeTool\Console;
+use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\Exceptions\ConfigValidation\NoAuthTokenException;
+use TranslationMergeTool\Output\IOutputInterface;
 
 class GitlabAPI extends VcsApiAbstract implements IVcsApi
 {
@@ -20,6 +15,13 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
      * @var string
      */
     protected $baseUri = 'https://gitlab.com/api/v4/';
+    private IOutputInterface $outputInterface;
+
+    public function __construct(Config $config, IOutputInterface $outputInterface)
+    {
+        parent::__construct($config);
+        $this->outputInterface = $outputInterface;
+    }
 
     protected function validateConfig(): void
     {
@@ -38,7 +40,7 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
     {
         $slug = urlencode($this->config->vcsRepository);
 
-        Console::debug("Using gitlab auth token {$this->config->gitlabAuthToken}...");
+        $this->outputInterface->debug("Using gitlab auth token {$this->config->gitlabAuthToken}...");
 
         $actions = [];
         foreach ($this->fileList as $translationFile) {
@@ -77,5 +79,10 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
         return new Client([
             'base_uri' => $this->baseUri,
         ]);
+    }
+
+    public function getProviderName(): string
+    {
+        return "Gitlab";
     }
 }

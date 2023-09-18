@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 2018-11-28
- * Time: 17:35
- */
 
 namespace UnitTests;
 
@@ -16,11 +10,31 @@ use TranslationMergeTool\Environment\Environment;
 
 abstract class AbstractCase extends TestCase
 {
+    protected string $testsTmp = __DIR__ . '/../tmp/';
     protected Config $config;
 
     protected function setUp(): void
     {
+        if (is_dir($this->testsTmp)) {
+            `rm -rf $this->testsTmp`;
+        }
+        mkdir($this->testsTmp);
+
+        $from = __DIR__ . '/../resources/basic_project';
+        $to = $this->testsTmp . 'basic_project';
+        `cp -r $from $to`;
+
+        $from = __DIR__ . '/../resources/monorep_project';
+        $to = $this->testsTmp . 'monorep_project';
+        `cp -r $from $to`;
+
         $this->config = $this->getTestConfig();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        `rm -rf $this->testsTmp`;
     }
 
     protected function getTestConfig(): Config
@@ -47,10 +61,7 @@ abstract class AbstractCase extends TestCase
         return $this->getTestProjectDir().'/.translate-config.json';
     }
 
-    protected function getTestProjectDir()
-    {
-        return __DIR__.'/../project';
-    }
+    protected abstract function getTestProjectDir();
 
     protected function getTestComponent(): Component
     {

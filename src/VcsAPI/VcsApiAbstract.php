@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lehadnk
- * Date: 30/10/2018
- * Time: 20:07
- */
 
 namespace TranslationMergeTool\VcsAPI;
 
