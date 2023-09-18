@@ -4,7 +4,6 @@ namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\CodeParser\FileLister;
 use UnitTests\AbstractBasicCase;
-use UnitTests\AbstractCase;
 
 class FileListerTest extends AbstractBasicCase
 {

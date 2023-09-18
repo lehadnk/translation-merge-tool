@@ -4,7 +4,6 @@ namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\CodeParser\GitignoreReader;
 use UnitTests\AbstractBasicCase;
-use UnitTests\AbstractCase;
 
 class GitignoreReaderTest extends AbstractBasicCase
 {

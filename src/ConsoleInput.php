@@ -8,8 +8,6 @@ use TranslationMergeTool\Application\Application;
 use TranslationMergeTool\DTO\Arguments;
 use TranslationMergeTool\Environment\EnvironmentFactory;
 use TranslationMergeTool\Output\CliOutputInterface;
-use TranslationMergeTool\System\Git;
-use TranslationMergeTool\System\Msgfmt;
 
 class ConsoleInput extends CLI
 {

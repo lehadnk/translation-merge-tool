@@ -4,7 +4,6 @@ namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\CodeParser\ComponentParser;
 use UnitTests\AbstractBasicCase;
-use UnitTests\AbstractCase;
 
 class ParserTest extends AbstractBasicCase
 {

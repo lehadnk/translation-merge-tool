@@ -4,7 +4,6 @@ namespace UnitTests\CodeParser;
 
 use TranslationMergeTool\PoReader\PoPostProcessor;
 use UnitTests\AbstractBasicCase;
-use UnitTests\AbstractCase;
 
 class PoPostProcessorTest extends AbstractBasicCase
 {
@@ -17,7 +16,7 @@ class PoPostProcessorTest extends AbstractBasicCase
         $processor = new PoPostProcessor();
         $fixedFile = $processor->postProcessPoFile($contents);
         
-        $this->assertContains($this->malformedString, $contents);
-        $this->assertNotContains($this->malformedString, $fixedFile);
+        $this->assertStringContainsString($this->malformedString, $contents);
+        $this->assertStringNotContainsString($this->malformedString, $fixedFile);
     }
 }

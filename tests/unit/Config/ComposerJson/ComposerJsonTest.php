@@ -4,7 +4,6 @@ namespace UnitTests\Config\ComposerJson;
 
 use TranslationMergeTool\Config\ComposerJson\ComposerJsonFactory;
 use UnitTests\AbstractBasicCase;
-use UnitTests\AbstractCase;
 
 class ComposerJsonTest extends AbstractBasicCase
 {

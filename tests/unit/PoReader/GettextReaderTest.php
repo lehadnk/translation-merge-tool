@@ -5,7 +5,6 @@ namespace UnitTests\PoReader;
 use TranslationMergeTool\DTO\TranslationString;
 use TranslationMergeTool\PoReader\GettextReader;
 use UnitTests\AbstractBasicCase;
-use UnitTests\AbstractCase;
 
 class GettextReaderTest extends AbstractBasicCase
 {

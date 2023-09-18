@@ -4,7 +4,6 @@ namespace TranslationMergeTool\CodeParser;
 
 
 use TranslationMergeTool\Config\Component;
-use TranslationMergeTool\Config\Config;
 use TranslationMergeTool\DTO\TranslationString;
 
 class ComponentParser

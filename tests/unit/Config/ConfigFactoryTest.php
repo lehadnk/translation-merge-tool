@@ -5,7 +5,6 @@ namespace UnitTests\Config;
 use TranslationMergeTool\Config\ConfigFactory;
 use TranslationMergeTool\Environment\Environment;
 use UnitTests\AbstractBasicCase;
-use UnitTests\AbstractCase;
 
 class ConfigFactoryTest extends AbstractBasicCase
 {
