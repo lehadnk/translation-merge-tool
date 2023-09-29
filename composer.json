@@ -1,7 +1,7 @@
 {
     "name": "lehadnk/translation-merge-tool",
     "description": "The tool for generation and merge of translation files.",
-    "version": "1.4.4",
+    "version": "1.5.0",
     "authors": [
         {
             "name": "Alexey Zauzin",
