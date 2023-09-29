@@ -9,8 +9,7 @@ class EnvironmentFactory
         return new Environment(
             $this->getEnvironmentVariable('I18N_MRG_GITLAB_AUTH_TOKEN'),
             $this->getEnvironmentVariable('I18N_MRG_GITHUB_AUTH_TOKEN'),
-            $this->getEnvironmentVariable('I18N_MRG_BITBUCKET_USERNAME'),
-            $this->getEnvironmentVariable('I18N_MRG_BITBUCKET_PASSWORD'),
+            $this->getEnvironmentVariable('I18N_MRG_BITBUCKET_AUTH_TOKEN'),
             $this->getEnvironmentVariable('I18N_WEBLATE_AUTH_TOKEN'),
         );
     }

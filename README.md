@@ -125,8 +125,9 @@ To use the tool with various VCS providers, you must set up authorization.
 3. Export your token to I18N_MRG_GITHUB_AUTH_TOKEN env variable: `export I18N_MRG_GITHUB_AUTH_TOKEN=<token>`
 
 ### BitBucket
-1. Place your username under I18N_MRG_BITBUCKET_USERNAME env variable: `export I18N_MRG_BITBUCKET_USERNAME=<username>`
-2. Place your password under I18N_MRG_BITBUCKET_PASSWORD env variable: `export I18N_MRG_BITBUCKET_PASSWORD=<password>`
+1. Go to repository settings
+2. Issue the repository access token with read/write permissions in the "Access Tokens" section
+3. Place your token in I18N_MRG_BITBUCKET_AUTH_TOKEN env variable: `export I18N_MRG_BITBUCKET_AUTH_TOKEN=<username>`
 
 # How to add it to the project
 First, you need to create a`.translate-config.json` configuration file under the project's root. Example contents of the config file:

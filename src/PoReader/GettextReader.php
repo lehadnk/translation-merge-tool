@@ -61,6 +61,8 @@ class GettextReader
                 } else {
                     continue;
                 }
+            } else {
+                $addedStrings[] = $translationString->originalString;
             }
 
             $translation = new Translation('', $translationString->originalString);
@@ -69,8 +71,6 @@ class GettextReader
                 $translation->addReference($reference);
             }
             $this->translations->offsetSet(null, $translation);
-
-            $addedStrings[] = $translationString->originalString;
         }
 
         return $addedStrings;

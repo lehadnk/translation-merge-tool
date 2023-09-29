@@ -27,6 +27,7 @@ class RepositoryManager
         }
 
         foreach ($affectedTranslationFiles as $translationFile) {
+            $this->outputInterface->debug("Adding {$translationFile->relativePath} to the commit...");
             $this->vcsApi->addFile($translationFile);
         }
 

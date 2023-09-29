@@ -55,10 +55,10 @@ class ApplicationFactory
             return $vcsFactory->make($config);
         } catch (NoAuthCredentialsException $ex) {
             $this->outputInterface->error("Error! No {$config->vcs} authentication credentials found.");
-            $this->outputInterface->info("Please consider adding I18N_MRG_VCS_USERNAME and I18N_MRG_VCS_PASSWORD environment variables into your ~\.bash_profile");
+            $this->outputInterface->info("Please consider adding the corresponding environment variables into your ~\.bash_profile: https://github.com/lehadnk/translation-merge-tool#handling-authorization-tokens");
         } catch (NoAuthTokenException $ex) {
             $this->outputInterface->error("Error! No {$config->vcs} authentication token found.");
-            $this->outputInterface->info("Please consider adding the corresponding environment variable into your ~\.bash_profile");
+            $this->outputInterface->info("Please consider adding the corresponding environment variable into your ~\.bash_profile: https://github.com/lehadnk/translation-merge-tool#handling-authorization-tokens");
         } catch (ConfigValidationException $ex) {
             $this->outputInterface->error($ex->getMessage());
         }

@@ -15,14 +15,15 @@ class BitbucketAPI extends VcsApiAbstract implements IVcsApi
      * @return ResponseInterface
      *
      * Request example:
-     * curl -u lehadnk@gmail.com:password \
-     * -X POST https://api.bitbucket.org/2.0/repositories/nevidimov/giftd-crm/src \
+     * curl -X POST https://api.bitbucket.org/2.0/repositories/nevidimov/giftd-crm/src \
+     * -H "Authorization: Bearer <token>" \
      * -F resources/lang/i18n/tr_TR/LC_MESSAGES/default.po=@resources/lang/i18n/tr_TR/LC_MESSAGES/default.po \
      * -F branch=translation-test \
      * -i
      */
     public function commit(): ResponseInterface
     {
+
         $response = null;
         foreach ($this->fileList as $translationFile) {
             $response = $this->httpClient->post(
@@ -37,8 +38,8 @@ class BitbucketAPI extends VcsApiAbstract implements IVcsApi
                             'name' => $translationFile->relativePath,
                             'contents' => file_get_contents($translationFile->absolutePath),
                         ]
-                    ]
-                ]
+                    ],
+                ],
             );
         }
 
@@ -49,13 +50,15 @@ class BitbucketAPI extends VcsApiAbstract implements IVcsApi
     {
         return new Client([
             'base_uri' => $this->baseUri,
-            'auth' => [$this->config->bitbucketUsername, $this->config->bitbucketPassword],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->config->bitbucketAccessToken
+            ]
         ]);
     }
 
     protected function validateConfig(): void
     {
-        if (!$this->config->bitbucketUsername || !$this->config->bitbucketPassword) {
+        if (!$this->config->bitbucketAccessToken) {
             throw new NoAuthCredentialsException();
         }
     }

@@ -25,8 +25,9 @@ class ConfigFactory
 
         $config->gitlabAuthToken = $this->environment->gitlabAuthToken;
         $config->githubAuthToken = $this->environment->githubAuthToken;
-        $config->bitbucketUsername =  $this->environment->bitbucketUsername ?? $config->bitbucketUsername;
-        $config->bitbucketPassword = $this->environment->bitbucketPassword ?? $config->bitbucketPassword;
+//        $config->bitbucketUsername =  $this->environment->bitbucketUsername ?? $config->bitbucketUsername;
+//        $config->bitbucketPassword = $this->environment->bitbucketPassword ?? $config->bitbucketPassword;
+        $config->bitbucketAccessToken = $this->environment->bitbucketAccessToken ?? $config->bitbucketAccessToken;
         $config->weblateAuthToken = $this->environment->weblateAuthToken ?? $config->weblateAuthToken;
 
         return $config;

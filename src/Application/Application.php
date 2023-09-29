@@ -48,6 +48,8 @@ class Application
 
     public function run(): int
     {
+        chdir($this->workingDir);
+
         // Version command is always available even if application is not configured
         if ($this->arguments->version) {
             $this->getPackageVersion();

@@ -88,7 +88,7 @@ class TranslationFileManager
                 $this->outputInterface->info("i18n_mrg --print-untranslated");
             }
 
-            $this->outputInterface->success("Translation update success");
+            $this->outputInterface->success("Translation files update success");
         }
     }
 
@@ -121,10 +121,5 @@ class TranslationFileManager
         }
 
         return count($totalDisabledStrings);
-    }
-
-    public function addNewTranslationFile(string $localeName)
-    {
-
     }
 }

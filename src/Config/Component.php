@@ -10,6 +10,7 @@ class Component
     public string $translationFileName;
     public string $weblateComponentSlug;
     public string $weblateProjectSlug;
+    public bool $compileMo = false;
 
     /**
      * @var string[]

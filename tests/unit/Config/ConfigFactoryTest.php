@@ -22,8 +22,7 @@ class ConfigFactoryTest extends AbstractBasicCase
 
         $this->assertEquals('1.3.0', $config->configVersion);
         $this->assertEquals('bitbucket', $config->vcs);
-        $this->assertEquals('test-bitbucket-username', $config->bitbucketUsername);
-        $this->assertEquals('test-bitbucket-password', $config->bitbucketPassword);
+        $this->assertEquals('test-bitbucket-token', $config->bitbucketAccessToken);
         $this->assertEquals('test/repository', $config->vcsRepository);
 
         $this->assertEquals('translation', $config->translationBranchName);

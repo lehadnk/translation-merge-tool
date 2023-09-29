@@ -39,6 +39,7 @@ class CodeParser
         $newStringsTotal = 0;
         foreach ($this->config->components as $component) {
             $strings = $this->getComponentStrings($component, $branchName);
+            $newComponentStrings = [];
 
             $this->outputInterface->info("Parsing translation files...");
             foreach($component->getLocaleList($this->workingDir) as $locale) {
@@ -53,16 +54,19 @@ class CodeParser
                 }
 
                 $addedStrings = $reader->addNewTranslations($strings);
+                $newComponentStrings = array_unique(array_merge($newComponentStrings, $addedStrings));
                 $reader->save();
 
                 $addedStringsCount = count($addedStrings);
-                $newStringsTotal += $addedStringsCount;
                 $addedStringsStr = implode("\n\t", $addedStrings);
                 $this->outputInterface->info("Added $addedStringsCount new strings!");
-                if ($newStringsTotal > 0) {
+                if ($addedStringsCount > 0) {
                     $this->outputInterface->debug("\n\t$addedStringsStr\n\n");
+                    $affectedTranslationFiles[] = $translationFile;
                 }
             }
+
+            $newStringsTotal += count($newComponentStrings);
         }
 
         return new CodeParseResult($newStringsTotal, $affectedTranslationFiles);

@@ -22,12 +22,11 @@ class ConsoleInput extends CLI
         $options->registerOption('force', 'pushes sources to repository and pulls component, even if no changes are found', 'f');
         $options->registerOption('no-weblate', 'skips all weblate-based operations');
         $options->registerOption('autoconfirm', 'autoconfirms all prompts');
-        $options->registerOption('workingdir', 'sets working dir');
+        $options->registerOption('workingdir', 'sets working dir', 'd', true);
     }
 
     protected function main(Options $options)
     {
-        $this->workingDir = getcwd();
         $arguments = new Arguments(
             $this->options->getOpt('weblate-pull', false),
             $this->options->getOpt('just-parse', false),
