@@ -28,11 +28,8 @@ First, you need to prepare your codebase to work with i18n_mrg:
 1. Configure your project to work with translation files. We'd suggest you use [GNU gettext](https://www.gnu.org/software/gettext/) format, but i18n_mrg could also compile JSON files as well if you prefer, which works better for web applications. You need to set up a directory in your project and store your translation files in it, naming each subfolder with the language code you're planning to use. Example file tree structure:
 ```
 /i18n/en_GB/messages.po
-/i18n/en_GB/messages.mo
 /i18n/de_DE/messages.po
-/i18n/de_DE/messages.mo
 /i18n/zh_CN/messages.po
-/i18n/zh_CN/messages.mo
 ```
 2. Use the wrapper function named `__()` to mark your translation strings. Implement the function to return the corresponding string from your storage, e.g.:
 ```java
@@ -127,7 +124,7 @@ To use the tool with various VCS providers, you must set up authorization.
 ### BitBucket
 1. Go to repository settings
 2. Issue the repository access token with read/write permissions in the "Access Tokens" section
-3. Place your token in I18N_MRG_BITBUCKET_AUTH_TOKEN env variable: `export I18N_MRG_BITBUCKET_AUTH_TOKEN=<username>`
+3. Place your token in I18N_MRG_BITBUCKET_AUTH_TOKEN env variable: `export I18N_MRG_BITBUCKET_AUTH_TOKEN=<token>`
 
 # How to add it to the project
 First, you need to create a`.translate-config.json` configuration file under the project's root. Example contents of the config file:
