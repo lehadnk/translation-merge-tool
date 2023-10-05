@@ -50,8 +50,7 @@ abstract class AbstractCase extends TestCase
         return new Environment(
             'test-gitlab-auth-token',
             'test-github-auth-token',
-            'test-bitbucket-username',
-            'test-bitbucket-password',
+            'test-bitbucket-token',
             'test-weblate-auth-token',
         );
     }

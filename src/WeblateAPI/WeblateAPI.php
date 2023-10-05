@@ -16,7 +16,7 @@ class WeblateAPI implements IWeblateAPI
         $this->authToken = $config->weblateAuthToken;
 
         $this->httpClient = new Client([
-            'base_uri' => $config->weblateServiceUrl.'/api/',
+            'base_uri' => rtrim($config->weblateServiceUrl, '/') . '/api/',
         ]);
     }
 

@@ -53,7 +53,7 @@ class TranslationFileManager
     {
         $translations = $this->getAllTranslationFiles();
 
-        $this->outputInterface->info("Untranslated string counts from $branchName:");
+        $this->outputInterface->info("Untranslated string counts from current branch:");
 
         $uniqueUntranslatedStrings = [];
 

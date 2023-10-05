@@ -74,7 +74,7 @@ class GitlabAPI extends VcsApiAbstract implements IVcsApi
     function createHttpClient(): Client
     {
         $this->baseUri = $this->config->vcsHostName ?? "https://gitlab.com";
-        $this->baseUri .= "/api/v4/";
+        $this->baseUri = rtrim($this->baseUri, '/') . "/api/v4/";
 
         return new Client([
             'base_uri' => $this->baseUri,
