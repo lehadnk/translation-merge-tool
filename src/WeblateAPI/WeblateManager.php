@@ -53,9 +53,10 @@ class WeblateManager
             if ($translationFile->component->compileMo) {
                 $moPath = $translationFile->getAbsolutePathToMo();
                 exec("msgfmt -o $moPath {$translationFile->absolutePath} > /dev/null 2>&1");
-                if ($this->config->outputJson) {
-                    exec("i18next-conv -l {$translationFile->weblateCode} -s {$translationFile->absolutePath} -t {$translationFile->absolutePath}.json");
-                }
+            }
+
+            if ($this->config->outputJson) {
+                exec("i18next-conv -l {$translationFile->weblateCode} -s {$translationFile->absolutePath} -t {$translationFile->absolutePath}.json");
             }
         }
 
