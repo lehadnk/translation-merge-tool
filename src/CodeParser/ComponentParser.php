@@ -8,17 +8,7 @@ use TranslationMergeTool\DTO\TranslationString;
 
 class ComponentParser
 {
-    const REGEXPS = [
-        '"' => [
-            '/[^a-zA-Z0-9]t(?:link)?\(\s*"(([^"\\\\]*(\\\\.[^"\\\\]*)*))"\s*(,|\))/m',
-            '/[^a-zA-Z0-9]_?_(?:link)?\(\s*"(([^"\\\\]*(\\\\.[^"\\\\]*)*))"\s*(,|\))/m',
-        ],
-        "'" => [
-            '/[^a-zA-Z0-9]t(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
-            '/[^a-zA-Z0-9]_?_(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
-
-        ],
-    ];
+    private array $regexps = [];
 
 
     /**
@@ -52,6 +42,29 @@ class ComponentParser
         $this->workingDir = $workingDir;
         $this->branchName = $branchName;
         $this->fileLister = new FileLister();
+
+        $this->defineRegexps($component);
+    }
+
+    private function defineRegexps(Component $component)
+    {
+        $regexps = [
+            '"' => [
+                '/[^a-zA-Z0-9]t(?:link)?\(\s*"(([^"\\\\]*(\\\\.[^"\\\\]*)*))"\s*(,|\))/m',
+                '/[^a-zA-Z0-9]_?_(?:link)?\(\s*"(([^"\\\\]*(\\\\.[^"\\\\]*)*))"\s*(,|\))/m',
+            ],
+            "'" => [
+                '/[^a-zA-Z0-9]t(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
+                '/[^a-zA-Z0-9]_?_(?:link)?\(\s*\'(([^\'\\\\]*(\\\\.[^\'\\\\]*)*))\'\s*(,|\))/m',
+
+            ],
+        ];
+
+        if ($component->parseJavaAnnotations) {
+            $regexps['"'][] = '/@[a-zA-Z0-9]*([\ \r\n]+)?\(.*([\ \r\n]+)?message([\ \r\n]+)?=([\ \r\n]+)?"{.*"([\ \r\n]+)?\)/sm';
+        }
+
+        $this->regexps = $regexps;
     }
 
     /**
@@ -82,9 +95,10 @@ class ComponentParser
         $content = file_get_contents($path);
 
         $strings = [];
-        foreach(self::REGEXPS as $quoteType => $regexps) {
+        foreach($this->regexps as $quoteType => $regexps) {
             foreach ($regexps as $regexp) {
                 preg_match_all($regexp, $content, $regexpResult);
+                var_dump($regexpResult);
                 foreach ($regexpResult as &$result) {
                     // We are removing all escaped quotes from the string
                     // Example #1: __("this is a \"quote\" ") => this is a "quote"
