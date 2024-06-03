@@ -39,8 +39,7 @@ class ParserTest extends AbstractBasicCase
     public function testParseJavaAnnotation()
     {
         $strings = $this->parser->parseFile($this->getTestProjectDir().'/src/SpringValidationMessage.java');
-        var_dump($strings);
-        $this->assertContains('User email cannot be blank', $strings);
+        $this->assertContains('"Email" cannot be blank', $strings);
         $this->assertContains('Password cannot be blank', $strings);
         $this->assertEquals(count($strings), 2);
     }
