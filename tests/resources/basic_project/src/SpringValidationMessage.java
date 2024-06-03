@@ -17,4 +17,12 @@ public class SpringValidationMessage {
                         "{Password cannot be blank}"
     )
     public String password;
+
+    @NotNull(message = "This string should not be present");
+    public String emailConfirmation;
+
+    public String testFunction()
+    {
+        return "This string should not be present";
+    }
 }
