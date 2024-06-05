@@ -6,6 +6,13 @@ namespace TranslationMergeTool\System;
 
 class Git implements ExternalApplication
 {
+    private string $currentBranch;
+
+    public function __construct(string $currentBranch)
+    {
+        $this->currentBranch = $currentBranch;
+    }
+
     public function isInstalled(): bool
     {
         return Shell::run('git')->code !== 127;
@@ -13,6 +20,10 @@ class Git implements ExternalApplication
 
     public function getCurrentBranchName(): string
     {
-        return trim(`git rev-parse --abbrev-ref HEAD`);
+        if ($this->currentBranch == null) {
+            $this->currentBranch = trim(`git rev-parse --abbrev-ref HEAD`);
+        }
+
+        return $this->currentBranch;
     }
 }

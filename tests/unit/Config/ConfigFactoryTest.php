@@ -19,7 +19,7 @@ class ConfigFactoryTest extends AbstractBasicCase
         $configFactory = new ConfigFactory($environment);
         $config = $configFactory->read($this->getTestConfigPath());
 
-        $this->assertEquals('1.3.0', $config->configVersion);
+        $this->assertEquals('1.4.0', $config->configVersion);
         $this->assertEquals('bitbucket', $config->vcs);
         $this->assertEquals('test-bitbucket-token', $config->bitbucketAccessToken);
         $this->assertEquals('test/repository', $config->vcsRepository);
