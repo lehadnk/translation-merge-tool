@@ -8,7 +8,7 @@ class Git implements ExternalApplication
 {
     private string $currentBranch;
 
-    public function __construct(string $currentBranch)
+    public function __construct(?string $currentBranch)
     {
         $this->currentBranch = $currentBranch;
     }
