@@ -6,7 +6,7 @@ namespace TranslationMergeTool\System;
 
 class Git implements ExternalApplication
 {
-    private string $currentBranch;
+    private ?string $currentBranch;
 
     public function __construct(?string $currentBranch)
     {

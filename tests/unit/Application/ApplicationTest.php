@@ -23,7 +23,7 @@ class ApplicationTest extends AbstractMonorepCase
         $exitCode = $application->run();
 
         $this->assertEquals(0, $exitCode);
-        $this->assertEquals("1.6.1", $bufferedOI->getBuffer());
+        $this->assertEquals("1.6.2", $bufferedOI->getBuffer());
     }
 
     public function testWeblatePull()
