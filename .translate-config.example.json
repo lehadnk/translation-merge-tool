@@ -1,5 +1,5 @@
 {
-  "configVersion": "1.3.0",
+  "configVersion": "1.4.0",
 
   "components": [
     {
@@ -11,7 +11,8 @@
       "excludePaths": [],
       "translationFileName": "resources/lang/i18n/{localeName}/LC_MESSAGES/default.po",
       "weblateProjectSlug": "crm",
-      "weblateComponentSlug": "main"
+      "weblateComponentSlug": "main",
+      "parseJavaAnnotations": true
     }
   ],
 

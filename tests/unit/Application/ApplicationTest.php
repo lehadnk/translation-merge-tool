@@ -7,6 +7,7 @@ use TranslationMergeTool\DTO\Arguments;
 use TranslationMergeTool\Environment\EnvironmentFactory;
 use TranslationMergeTool\Output\BufferOutputInterface;
 use TranslationMergeTool\PoReader\GettextReader;
+use TranslationMergeTool\System\Git;
 use TranslationMergeTool\WeblateAPI\MockWeblateAPI;
 use UnitTests\AbstractMonorepCase;
 
@@ -22,7 +23,7 @@ class ApplicationTest extends AbstractMonorepCase
         $exitCode = $application->run();
 
         $this->assertEquals(0, $exitCode);
-        $this->assertEquals("1.5.0", $bufferedOI->getBuffer());
+        $this->assertEquals("1.5.2", $bufferedOI->getBuffer());
     }
 
     public function testWeblatePull()
@@ -114,7 +115,8 @@ class ApplicationTest extends AbstractMonorepCase
             $this->getTestProjectDir(),
             $arguments,
             (new EnvironmentFactory())->build(),
-            $bufferedOI
+            $bufferedOI,
+            new Git("master")
         );
 
         return $application;

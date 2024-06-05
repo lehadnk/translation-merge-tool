@@ -9,7 +9,7 @@ use TranslationMergeTool\Exceptions\ConfigValidation\ConfigVersionMismatch;
 
 class ConfigFactory
 {
-    const ACCEPTS_CONFIG_VERSIONS = ['1.3.0'];
+    const ACCEPTS_CONFIG_VERSIONS = ['1.3.0', '1.4.0'];
 
     public function __construct(
         private readonly Environment $environment
@@ -25,8 +25,6 @@ class ConfigFactory
 
         $config->gitlabAuthToken = $this->environment->gitlabAuthToken;
         $config->githubAuthToken = $this->environment->githubAuthToken;
-//        $config->bitbucketUsername =  $this->environment->bitbucketUsername ?? $config->bitbucketUsername;
-//        $config->bitbucketPassword = $this->environment->bitbucketPassword ?? $config->bitbucketPassword;
         $config->bitbucketAccessToken = $this->environment->bitbucketAccessToken ?? $config->bitbucketAccessToken;
         $config->weblateAuthToken = $this->environment->weblateAuthToken ?? $config->weblateAuthToken;
 

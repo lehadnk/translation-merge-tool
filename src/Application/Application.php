@@ -36,13 +36,14 @@ class Application
         Arguments $arguments,
         Environment $environment,
         IOutputInterface $outputInterface,
+        Git $git,
     ) {
         $this->workingDir = $workingDir;
         $this->arguments = $arguments;
         $this->outputInterface = $outputInterface;
         $this->environment = $environment;
 
-        $this->git = new Git();
+        $this->git = $git;
         $this->msgfmt = new Msgfmt();
     }
 

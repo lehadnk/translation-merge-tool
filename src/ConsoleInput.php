@@ -8,6 +8,7 @@ use TranslationMergeTool\Application\Application;
 use TranslationMergeTool\DTO\Arguments;
 use TranslationMergeTool\Environment\EnvironmentFactory;
 use TranslationMergeTool\Output\CliOutputInterface;
+use TranslationMergeTool\System\Git;
 
 class ConsoleInput extends CLI
 {
@@ -44,7 +45,8 @@ class ConsoleInput extends CLI
             $this->options->getOpt('workingdir', getcwd()),
             $arguments,
             $environmentFactory->build(),
-            new CliOutputInterface($this)
+            new CliOutputInterface($this),
+            new Git(null)
         );
 
         return $application->run();

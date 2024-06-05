@@ -19,7 +19,7 @@ class Arguments
         bool $justParse,
         bool $check,
         bool $prune,
-        bool $printTranslated,
+        bool $printUntranslated,
         bool $version,
         bool $force,
         bool $noWeblate,
@@ -29,7 +29,7 @@ class Arguments
         $this->justParse = $justParse;
         $this->check = $check;
         $this->prune = $prune;
-        $this->printUntranslated = $printTranslated;
+        $this->printUntranslated = $printUntranslated;
         $this->version = $version;
         $this->force = $force;
         $this->noWeblate = $noWeblate;

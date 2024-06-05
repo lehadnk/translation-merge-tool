@@ -1,5 +1,5 @@
 {
-  "configVersion": "1.3.0",
+  "configVersion": "1.4.0",
 
   "components": [
     {
@@ -13,7 +13,8 @@
       ],
       "translationFileName": "translations/{localeName}/translation.po",
       "weblateProjectSlug": "crm",
-      "weblateComponentSlug": "main"
+      "weblateComponentSlug": "main",
+      "parseJavaAnnotations": true
     }
   ],
 
