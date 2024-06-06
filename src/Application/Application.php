@@ -218,7 +218,7 @@ class Application
 
     private function prune()
     {
-        if ($this->git->getCurrentBranchName() !== 'master') {
+        if ($this->git->getCurrentBranchName() !== 'master' || $this->git->getCurrentBranchName() !== 'main') {
             $this->outputInterface->error("The --prune argument could be run from master branch only! Please consider running: ".PHP_EOL."git checkout master");
             return;
         }
