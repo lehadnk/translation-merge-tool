@@ -20,3 +20,6 @@ msgstr ""
 #: databroker/DatabrokerApplication.php
 msgid "Translation key from databroker application"
 msgstr "It's translated"
+
+msgid "Value cannot be null"
+msgstr ""

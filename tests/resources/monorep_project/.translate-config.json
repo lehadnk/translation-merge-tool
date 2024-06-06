@@ -18,7 +18,8 @@
       ],
       "translationFileName": "translations/{localeName}/databroker.po",
       "weblateProjectSlug": "monorep",
-      "weblateComponentSlug": "databroker"
+      "weblateComponentSlug": "databroker",
+      "parseJavaAnnotations": true
     }
   ],
 

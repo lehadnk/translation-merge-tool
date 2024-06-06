@@ -89,6 +89,7 @@ class ApplicationTest extends AbstractMonorepCase
 
         $newPoFileContents = file_get_contents($this->getTestProjectDir() . '/translations/fr/databroker.po');
         $this->assertStringContainsString('#~ msgid "Translation key from api application"', $newPoFileContents);
+        $this->assertStringNotContainsString('#~ msgid "Value cannot be null"', $newPoFileContents);
     }
 
     public function testRun()
